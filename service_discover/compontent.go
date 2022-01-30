@@ -2,9 +2,9 @@ package service_discover
 
 import (
 	"bufio"
-	"code.inke.cn/lingxi/server/athena/sd/net"
-	"code.inke.cn/lingxi/server/athena/sd/parse"
 	"fmt"
+	"github.com/fuyao-w/sd/net"
+	"github.com/fuyao-w/sd/parse"
 	netAddr "net"
 	"os"
 )

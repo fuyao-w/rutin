@@ -1,7 +1,7 @@
 package main
 
 import (
-	"code.inke.cn/lingxi/server/athena/sd/service_discover"
+	"github.com/fuyao-w/sd/service_discover"
 	"time"
 )
 

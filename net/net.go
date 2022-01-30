@@ -2,8 +2,8 @@ package net
 
 import (
 	"bufio"
-	"code.inke.cn/lingxi/server/athena/sd/parse"
 	"fmt"
+	"github.com/fuyao-w/sd/parse"
 	"net"
 )
 
