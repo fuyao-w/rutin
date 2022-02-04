@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"github.com/fuyao-w/sd/net"
 	"github.com/fuyao-w/sd/parse"
-	"github.com/fuyao-w/sd/sd"
+	"github.com/fuyao-w/sd/proxy"
 	"github.com/fuyao-w/sd/utils"
 	"go/token"
 	"log"
@@ -37,16 +37,11 @@ type (
 		rcvr         reflect.Value
 	}
 	Server struct {
-		Name           string `json:"name"`
-		Port           int    `json:"port"`
-		addr           string `json:"addr"`
-		sdComponent    sd.ServiceDiscover
-		RegisterCenter RegisterCenter
+		Name string `json:"name"`
+		Port int    `json:"port"`
+		addr string `json:"addr"`
 	}
-	RegisterCenter struct {
-		Type string `json:"type"`
-		Addr string `json:"addr"`
-	}
+
 	ServerRegister interface {
 		Name() string
 	}
@@ -146,7 +141,7 @@ func RegisterHandle(handle ServerRegister) {
 	typ := reflect.TypeOf(handle)
 	rcvr := reflect.ValueOf(handle)
 	fmt.Println("RegisterHandle", handle.Name())
-	serviceMap[handle.Name()] = Service{
+	serviceMap[proxy.DefaultConfig.Server.Name] = Service{
 		methRegister: suitableMethods(typ, false),
 		typ:          typ,
 		rcvr:         rcvr,
@@ -180,31 +175,7 @@ func HandleConnection(conn netAddr.Conn) {
 	conn.Write(bytes)
 }
 
-func (s *Server) Server() {
+func BeginServer() {
+	s := proxy.DefaultConfig.Server
 	net.Server(s.addr, HandleConnection)
-}
-
-func (s *Server) Init() {
-	var (
-		sdComponent *sd.RedisRegisterProtocol
-		err         error
-	)
-	s.addr = fmt.Sprintf("%s:%d", utils.GetIP(), s.Port)
-	switch s.RegisterCenter.Type {
-	case "redis":
-		sdComponent, err = sd.NewRedisRegisterProtocol(s.RegisterCenter.Addr)
-	case "consul":
-		log.Fatal("consul register not implement")
-		return
-	}
-
-	if err != nil {
-		fmt.Println("init err ", err)
-		return
-	}
-	sdComponent.SetRegisterName(s.Name)
-	if err = sdComponent.Register(s.addr); err != nil {
-		fmt.Println("consumer register ", err)
-		return
-	}
 }

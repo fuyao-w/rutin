@@ -6,10 +6,9 @@ import (
 )
 
 type ServiceDiscover interface {
-	Register(addr string) error
-	Unregister(addr string) error
-	GetAddrSlice() (arrs []string)
-	SetRegisterName(name string)
+	Register(name,addr string) error
+	Unregister(name,addr string) error
+	GetAddrSlice(name string) (arrs []string)
 }
 
 const (
@@ -17,7 +16,6 @@ const (
 )
 
 type RedisRegisterProtocol struct {
-	name string
 	rds  redigo.Conn
 }
 
@@ -48,8 +46,8 @@ func NewRedisRegisterProtocol(addr string) (r *RedisRegisterProtocol, err error)
 func getKey(template string, args ...interface{}) string {
 	return fmt.Sprintf(template, args...)
 }
-func (r *RedisRegisterProtocol) Register(addr string) error {
-	_, err := r.rds.Do("sadd", getKey(key, r.name), addr)
+func (r *RedisRegisterProtocol) Register(name,addr string) error {
+	_, err := r.rds.Do("sadd", getKey(key, name), addr)
 	if err != nil {
 		fmt.Println("redis register err ", err)
 		return err
@@ -57,8 +55,8 @@ func (r *RedisRegisterProtocol) Register(addr string) error {
 	return nil
 }
 
-func (r *RedisRegisterProtocol) Unregister(addr string) error {
-	_, err := r.rds.Do("srem", getKey(key, r.name), addr)
+func (r *RedisRegisterProtocol) Unregister(name,addr string) error {
+	_, err := r.rds.Do("srem", getKey(key, name), addr)
 	if err != nil {
 		fmt.Println("redis register err ", err)
 		return err
@@ -66,14 +64,10 @@ func (r *RedisRegisterProtocol) Unregister(addr string) error {
 	return nil
 }
 
-func (r *RedisRegisterProtocol) GetAddrSlice() (arrs []string) {
-	reply, err := redigo.Strings(r.rds.Do("SMembers", getKey(key, r.name)))
+func (r *RedisRegisterProtocol) GetAddrSlice(name string) (arrs []string) {
+	reply, err := redigo.Strings(r.rds.Do("SMembers", getKey(key, name)))
 	if err != nil {
 		fmt.Println("redis register err ", err)
 	}
 	return reply
-}
-
-func (r *RedisRegisterProtocol) SetRegisterName(name string) {
-	r.name = name
 }

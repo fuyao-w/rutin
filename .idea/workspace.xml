@@ -20,9 +20,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d4010632-cc9d-49cc-9acd-2efff4a06ec3" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/net/net.go" beforeDir="false" afterPath="$PROJECT_DIR$/net/net.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/proxy/proxy.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main/main.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/proxy/client/compontent.go" beforeDir="false" afterPath="$PROJECT_DIR$/proxy/client/compontent.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/proxy/conf.go" beforeDir="false" afterPath="$PROJECT_DIR$/proxy/conf.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/proxy/server/server.go" beforeDir="false" afterPath="$PROJECT_DIR$/proxy/server/server.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sd/sd.go" beforeDir="false" afterPath="$PROJECT_DIR$/sd/sd.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worker/clac.go" beforeDir="false" afterPath="$PROJECT_DIR$/worker/clac.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -116,9 +121,9 @@
       <screen x="0" y="25" width="1440" height="875" />
     </state>
     <state width="500" height="445" key="SwitcherDM/0.25.1440.875@0.25.1440.875" timestamp="1643969316195" />
-    <state x="421" y="217" width="597" height="490" key="find.popup" timestamp="1643979523063">
+    <state x="421" y="217" width="775" height="490" key="find.popup" timestamp="1643993170975">
       <screen x="0" y="25" width="1440" height="875" />
     </state>
-    <state x="421" y="217" width="597" height="490" key="find.popup/0.25.1440.875@0.25.1440.875" timestamp="1643979523063" />
+    <state x="421" y="217" width="775" height="490" key="find.popup/0.25.1440.875@0.25.1440.875" timestamp="1643993170975" />
   </component>
 </project>

@@ -2,40 +2,29 @@ package worker
 
 import (
 	"encoding/json"
-	"github.com/fuyao-w/sd/proxy/client"
+	"github.com/fuyao-w/sd/proxy"
+
 	"github.com/fuyao-w/sd/proxy/server"
 	"github.com/fuyao-w/sd/utils"
 	"log"
 )
 
 type ProxyHandle struct {
-	client *client.Client
+	//client *client.Client
 }
 
-func InitProxyHandle() *ProxyHandle {
-	c := &client.Client{
-		Name:          "calc",
-		EndpointsFrom: "redis",
-	}
-	c.Init()
-	return &ProxyHandle{
-		client: c,
-	}
+func (p *ProxyHandle) Name() string {
+	return "calc"
 }
 
-func InitServer() *server.Server {
-	handle := Handle{}
-	s := &server.Server{
-		Name: handle.Name(),
-		Port: 10010,
-		RegisterCenter: server.RegisterCenter{
-			Type: "redis",
-			Addr: "127.0.0.1:6379",
-		},
-	}
-	server.RegisterHandle(&handle)
-	s.Init()
-	return s
+func InitProxyHandle(name string) *ProxyHandle {
+	return &ProxyHandle{}
+}
+
+func InitHandle() (handle *Handle) {
+	handle = &Handle{}
+	server.RegisterHandle(handle)
+	return handle
 }
 
 type Handler interface {
@@ -51,14 +40,15 @@ type ClacResp struct {
 }
 
 func (p *ProxyHandle) Calc(req ClacReq, calcResp *ClacResp) error {
+	client := proxy.DefaultConfig.ClientMap[p.Name()]
 	desc := server.HandlerDesc{
-		ServiceName: p.client.Name,
+		ServiceName: p.Name(),
 		MethName:    "Calc",
 		Param:       utils.GetJsonBytes(req),
 	}
 
 	log.Println("producer body", string(utils.GetJsonBytes(desc)), string(utils.GetJsonBytes(req)))
-	resp, err := p.client.Call(utils.GetJsonBytes(desc))
+	resp, err := client.Call(utils.GetJsonBytes(desc))
 	if err != nil {
 		log.Println("Producer err", err)
 		calcResp = &ClacResp{
