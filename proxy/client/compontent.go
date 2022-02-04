@@ -11,7 +11,7 @@ import (
 type Client struct {
 	Name          string `json:"name"`
 	EndpointsFrom string `json:"endpoints_from"` //redis consul
-	sdComponent   *sd.RedisRegisterProtocol
+	sdComponent   sd.ServiceDiscover
 }
 
 func (c *Client) Init() {

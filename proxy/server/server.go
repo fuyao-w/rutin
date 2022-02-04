@@ -39,7 +39,7 @@ type (
 	Server struct {
 		Name        string `json:"name"`
 		addr        string `json:"addr"`
-		sdComponent *sd.RedisRegisterProtocol
+		sdComponent sd.ServiceDiscover
 	}
 	ServerRegister interface {
 		Name() string
