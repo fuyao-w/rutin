@@ -1,4 +1,4 @@
-package service_discover
+package sd
 
 import (
 	"fmt"
@@ -38,6 +38,7 @@ func NewRedisRegisterProtocol() (r *RedisRegisterProtocol, err error) {
 	//		IdleTimeout:     600,
 	//	}),
 	//}, nil
+
 	conn, err := redigo.Dial("tcp", "127.0.0.1:6379")
 	return &RedisRegisterProtocol{
 		rds: conn,

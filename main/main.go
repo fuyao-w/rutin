@@ -1,12 +1,21 @@
 package main
 
 import (
-	"github.com/fuyao-w/sd/service_discover"
-	"time"
+	"fmt"
+	"github.com/fuyao-w/sd/worker"
 )
 
 func main() {
-	go service_discover.Consumer()
-	time.Sleep(time.Second)
-	service_discover.Producer()
+	var (
+		client = worker.InitProxyHandle()
+		server = worker.InitServer()
+	)
+	go server.Server()
+	reply := &worker.ClacResp{}
+	err := client.Calc(worker.ClacReq{
+		A: 1,
+		B: 2,
+	}, reply)
+	fmt.Println(err, reply.DmError, reply.Result)
+
 }

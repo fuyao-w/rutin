@@ -1,8 +1,131 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="d4010632-cc9d-49cc-9acd-2efff4a06ec3" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/proxy/server/server.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/utils/utils.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/worker/clac.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/worker/clalc_server.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/net/net.go" beforeDir="false" afterPath="$PROJECT_DIR$/net/net.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/service_discover/compontent.go" beforeDir="false" afterPath="$PROJECT_DIR$/proxy/client/compontent.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/service_discover/service_discover.go" beforeDir="false" afterPath="$PROJECT_DIR$/sd/sd.go" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Go File" />
+      </list>
+    </option>
+  </component>
+  <component name="GOROOT" path="/usr/local/Cellar/go/1.16.4/libexec" />
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="24PWqHR5rfwXbjc3UeMEsfZOK4I" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+    <option name="showMembers" value="true" />
+  </component>
   <component name="PropertiesComponent">
+    <property name="DefaultGoTemplateProperty" value="Go File" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="go.import.settings.migrated" value="true" />
+    <property name="go.sdk.automatically.set" value="true" />
     <property name="last.edited.regexp" value="// a" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="preferences.updates" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/proxy/client" />
+      <recent name="$PROJECT_DIR$/proxy/server" />
+      <recent name="$PROJECT_DIR$/proxy" />
+      <recent name="$PROJECT_DIR$/service_discover" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="go build github.com/fuyao-w/sd/main" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
+      <module name="sd" />
+      <working_directory value="$PROJECT_DIR$" />
+      <kind value="PACKAGE" />
+      <filePath value="$PROJECT_DIR$/main/main.go" />
+      <package value="github.com/fuyao-w/sd/main" />
+      <directory value="$PROJECT_DIR$" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Go Build.go build github.com/fuyao-w/sd/main" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="WindowStateProjectService">
+    <state width="1398" height="253" key="GridCell.Tab.0.bottom" timestamp="1643979099737">
+      <screen x="0" y="25" width="1440" height="875" />
+    </state>
+    <state width="1398" height="253" key="GridCell.Tab.0.bottom/0.25.1440.875@0.25.1440.875" timestamp="1643979099737" />
+    <state width="1398" height="253" key="GridCell.Tab.0.center" timestamp="1643979099736">
+      <screen x="0" y="25" width="1440" height="875" />
+    </state>
+    <state width="1398" height="253" key="GridCell.Tab.0.center/0.25.1440.875@0.25.1440.875" timestamp="1643979099736" />
+    <state width="1398" height="253" key="GridCell.Tab.0.left" timestamp="1643979099735">
+      <screen x="0" y="25" width="1440" height="875" />
+    </state>
+    <state width="1398" height="253" key="GridCell.Tab.0.left/0.25.1440.875@0.25.1440.875" timestamp="1643979099735" />
+    <state width="1398" height="253" key="GridCell.Tab.0.right" timestamp="1643979099737">
+      <screen x="0" y="25" width="1440" height="875" />
+    </state>
+    <state width="1398" height="253" key="GridCell.Tab.0.right/0.25.1440.875@0.25.1440.875" timestamp="1643979099737" />
+    <state width="500" height="445" key="SwitcherDM" timestamp="1643969316195">
+      <screen x="0" y="25" width="1440" height="875" />
+    </state>
+    <state width="500" height="445" key="SwitcherDM/0.25.1440.875@0.25.1440.875" timestamp="1643969316195" />
+    <state x="421" y="217" width="597" height="490" key="find.popup" timestamp="1643979105845">
+      <screen x="0" y="25" width="1440" height="875" />
+    </state>
+    <state x="421" y="217" width="597" height="490" key="find.popup/0.25.1440.875@0.25.1440.875" timestamp="1643979105845" />
   </component>
 </project>
