@@ -20,16 +20,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d4010632-cc9d-49cc-9acd-2efff4a06ec3" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/proxy/server/server.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/utils/utils.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/worker/clac.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/worker/clalc_server.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main/main.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/net/net.go" beforeDir="false" afterPath="$PROJECT_DIR$/net/net.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/service_discover/compontent.go" beforeDir="false" afterPath="$PROJECT_DIR$/proxy/client/compontent.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/service_discover/service_discover.go" beforeDir="false" afterPath="$PROJECT_DIR$/sd/sd.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/proxy/client/compontent.go" beforeDir="false" afterPath="$PROJECT_DIR$/proxy/client/compontent.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/proxy/server/server.go" beforeDir="false" afterPath="$PROJECT_DIR$/proxy/server/server.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

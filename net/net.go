@@ -1,7 +1,6 @@
 package net
 
 import (
-	"bufio"
 	"fmt"
 	"github.com/fuyao-w/sd/parse"
 	"log"
@@ -41,15 +40,19 @@ func Client(addr string, msg []byte, parser parse.MsgParser) ([]byte, error) {
 	}
 
 	defer parser.Close()
-	w := bufio.NewWriter(conn)
+	//w := bufio.NewWriter(conn)
 	bytes, _ := parser.Encode(msg)
 
-	_, err = w.Write(bytes)
-	if err != nil {
-		fmt.Println("put err", err)
-	}
-	if err = w.Flush(); err != nil {
-		log.Printf("client flush err :%s", err.Error())
+	//_, err = w.Write(bytes)
+	//if err != nil {
+	//	fmt.Println("put err", err)
+	//}
+	//if err = w.Flush(); err != nil {
+	//	log.Printf("client flush err :%s", err.Error())
+	//	return nil, err
+	//}
+	if _, err = conn.Write(bytes); err != nil {
+		log.Printf("connect write data err :%s", err)
 		return nil, err
 	}
 

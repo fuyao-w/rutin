@@ -37,9 +37,15 @@ type (
 		rcvr         reflect.Value
 	}
 	Server struct {
-		Name        string `json:"name"`
-		addr        string `json:"addr"`
-		sdComponent sd.ServiceDiscover
+		Name           string `json:"name"`
+		Port           int    `json:"port"`
+		addr           string `json:"addr"`
+		sdComponent    sd.ServiceDiscover
+		RegisterCenter RegisterCenter
+	}
+	RegisterCenter struct {
+		Type string `json:"type"`
+		Addr string `json:"addr"`
 	}
 	ServerRegister interface {
 		Name() string
@@ -141,7 +147,7 @@ func RegisterHandle(handle ServerRegister) {
 	rcvr := reflect.ValueOf(handle)
 	fmt.Println("RegisterHandle", handle.Name())
 	serviceMap[handle.Name()] = Service{
-		methRegister: suitableMethods(typ, true),
+		methRegister: suitableMethods(typ, false),
 		typ:          typ,
 		rcvr:         rcvr,
 	}
@@ -179,15 +185,25 @@ func (s *Server) Server() {
 }
 
 func (s *Server) Init() {
-	s.addr = fmt.Sprintf("%s:10000", utils.GetIP())
+	var (
+		sdComponent *sd.RedisRegisterProtocol
+		err         error
+	)
+	s.addr = fmt.Sprintf("%s:%d", utils.GetIP(), s.Port)
+	switch s.RegisterCenter.Type {
+	case "redis":
+		sdComponent, err = sd.NewRedisRegisterProtocol(s.RegisterCenter.Addr)
+	case "consul":
+		log.Fatal("consul register not implement")
+		return
+	}
 
-	sd, err := sd.NewRedisRegisterProtocol()
 	if err != nil {
 		fmt.Println("init err ", err)
 		return
 	}
-	sd.SetRegisterName(s.Name)
-	if err = sd.Register(s.addr); err != nil {
+	sdComponent.SetRegisterName(s.Name)
+	if err = sdComponent.Register(s.addr); err != nil {
 		fmt.Println("consumer register ", err)
 		return
 	}

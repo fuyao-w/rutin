@@ -21,7 +21,7 @@ type RedisRegisterProtocol struct {
 	rds  redigo.Conn
 }
 
-func NewRedisRegisterProtocol() (r *RedisRegisterProtocol, err error) {
+func NewRedisRegisterProtocol(addr string) (r *RedisRegisterProtocol, err error) {
 	//return &RedisRegisterProtocol{
 	//	rds: redis.NewClient(&redis.Options{
 	//		Addr:            "127.0.0.1:6379",
@@ -39,7 +39,7 @@ func NewRedisRegisterProtocol() (r *RedisRegisterProtocol, err error) {
 	//	}),
 	//}, nil
 
-	conn, err := redigo.Dial("tcp", "127.0.0.1:6379")
+	conn, err := redigo.Dial("tcp", addr)
 	return &RedisRegisterProtocol{
 		rds: conn,
 	}, err

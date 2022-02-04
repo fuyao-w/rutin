@@ -16,7 +16,13 @@ type Client struct {
 
 func (c *Client) Init() {
 	var err error
-	c.sdComponent, err = sd.NewRedisRegisterProtocol()
+	switch c.EndpointsFrom {
+	case "redis":
+		c.sdComponent, err = sd.NewRedisRegisterProtocol()
+	case "consul":
+		log.Fatal("consul service discover not implement")
+	}
+
 	if err != nil {
 		log.Println("init err ", err)
 		return

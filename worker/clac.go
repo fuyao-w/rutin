@@ -25,9 +25,16 @@ func InitProxyHandle() *ProxyHandle {
 
 func InitServer() *server.Server {
 	handle := Handle{}
-	s := &server.Server{Name: handle.Name()}
-	s.Init()
+	s := &server.Server{
+		Name: handle.Name(),
+		Port: 10010,
+		RegisterCenter: server.RegisterCenter{
+			Type: "redis",
+			Addr: "127.0.0.1:6379",
+		},
+	}
 	server.RegisterHandle(&handle)
+	s.Init()
 	return s
 }
 
