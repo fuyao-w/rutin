@@ -20,7 +20,7 @@ type MsgParser interface {
 	@Delim 自定义的分隔符
 	原理：在内容结尾追加分隔符
 	如果内容里也有分隔符则用 \ 符号转义，
-	解析的时候先根据分隔符取内容，然后再将 内容里的转移符替换回来
+	解析的时候先根据分隔符取内容，然后再将 内容里的转义符替换回来
  */
 type DelimParser struct {
 	Delim byte
