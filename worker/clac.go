@@ -38,5 +38,5 @@ type ClacResp struct {
 }
 
 func (p *ProxyHandle) Calc(req ClacReq, calcResp *ClacResp) error {
-	return client.Register(p.Name(), "Calc", req, calcResp)
+	return client.Call(p.Name(), "Calc", req, calcResp)
 }

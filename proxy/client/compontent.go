@@ -25,7 +25,7 @@ func (c *Client) Call(msg []byte) ([]byte, error) {
 	return net.Client(addrs[0], msg, &parse.ProtocolParser{})
 }
 
-func Register(serviceName, methName string, req, reply interface{}) error {
+func Call(serviceName, methName string, req, reply interface{}) error {
 	client := DefaultClientMap[serviceName]
 	desc := server.HandlerDesc{
 		ServiceName: serviceName,
