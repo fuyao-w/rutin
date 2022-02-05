@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"github.com/fuyao-w/sd/net"
 	"github.com/fuyao-w/sd/parse"
-	"github.com/fuyao-w/sd/proxy"
 	"github.com/fuyao-w/sd/utils"
 	"go/token"
 	"log"
@@ -141,7 +140,7 @@ func RegisterHandle(handle ServerRegister) {
 	typ := reflect.TypeOf(handle)
 	rcvr := reflect.ValueOf(handle)
 	fmt.Println("RegisterHandle", handle.Name())
-	serviceMap[proxy.DefaultConfig.Server.Name] = Service{
+	serviceMap[handle.Name()] = Service{
 		methRegister: suitableMethods(typ, false),
 		typ:          typ,
 		rcvr:         rcvr,
@@ -176,6 +175,6 @@ func HandleConnection(conn netAddr.Conn) {
 }
 
 func BeginServer() {
-	s := proxy.DefaultConfig.Server
+	s := DefaultServer
 	net.Server(s.addr, HandleConnection)
 }

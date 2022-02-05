@@ -1,17 +1,15 @@
 package worker
 
 import (
-	"encoding/json"
-	"github.com/fuyao-w/sd/proxy"
-
+	"github.com/fuyao-w/sd/proxy/client"
 	"github.com/fuyao-w/sd/proxy/server"
-	"github.com/fuyao-w/sd/utils"
-	"log"
 )
 
 type ProxyHandle struct {
 	//client *client.Client
 }
+
+const serviceName = "calc"
 
 func (p *ProxyHandle) Name() string {
 	return "calc"
@@ -40,26 +38,5 @@ type ClacResp struct {
 }
 
 func (p *ProxyHandle) Calc(req ClacReq, calcResp *ClacResp) error {
-	client := proxy.DefaultConfig.ClientMap[p.Name()]
-	desc := server.HandlerDesc{
-		ServiceName: p.Name(),
-		MethName:    "Calc",
-		Param:       utils.GetJsonBytes(req),
-	}
-
-	log.Println("producer body", string(utils.GetJsonBytes(desc)), string(utils.GetJsonBytes(req)))
-	resp, err := client.Call(utils.GetJsonBytes(desc))
-	if err != nil {
-		log.Println("Producer err", err)
-		calcResp = &ClacResp{
-			DmError: 500,
-		}
-		return nil
-	}
-	err = json.Unmarshal(resp, &calcResp)
-	if err != nil {
-		log.Println("proxy calc err", err)
-	}
-
-	return nil
+	return client.Register(p.Name(), "Calc", req, calcResp)
 }
