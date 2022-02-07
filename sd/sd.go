@@ -2,13 +2,18 @@ package sd
 
 import (
 	"fmt"
+	"github.com/fuyao-w/sd/core"
 	redigo "github.com/garyburd/redigo/redis"
 )
 
 type ServiceDiscover interface {
-	Register(name,addr string) error
-	Unregister(name,addr string) error
+	Register(name, addr string) error
+	Unregister(name, addr string) error
 	GetAddrSlice(name string) (arrs []string)
+}
+
+type SdPluginFactory interface {
+	Factory(host string) (core.Plugin, error)
 }
 
 const (
@@ -16,7 +21,7 @@ const (
 )
 
 type RedisRegisterProtocol struct {
-	rds  redigo.Conn
+	rds redigo.Conn
 }
 
 func NewRedisRegisterProtocol(addr string) (r *RedisRegisterProtocol, err error) {
@@ -46,7 +51,7 @@ func NewRedisRegisterProtocol(addr string) (r *RedisRegisterProtocol, err error)
 func getKey(template string, args ...interface{}) string {
 	return fmt.Sprintf(template, args...)
 }
-func (r *RedisRegisterProtocol) Register(name,addr string) error {
+func (r *RedisRegisterProtocol) Register(name, addr string) error {
 	_, err := r.rds.Do("sadd", getKey(key, name), addr)
 	if err != nil {
 		fmt.Println("redis register err ", err)
@@ -55,7 +60,7 @@ func (r *RedisRegisterProtocol) Register(name,addr string) error {
 	return nil
 }
 
-func (r *RedisRegisterProtocol) Unregister(name,addr string) error {
+func (r *RedisRegisterProtocol) Unregister(name, addr string) error {
 	_, err := r.rds.Do("srem", getKey(key, name), addr)
 	if err != nil {
 		fmt.Println("redis register err ", err)

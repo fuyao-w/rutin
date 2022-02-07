@@ -1,19 +1,15 @@
-package parse
+package codec
 
 import (
 	"bufio"
 	"errors"
 	"fmt"
-	"net"
+	"io"
 	"strconv"
 	"strings"
 )
 
 type ProtocolParser struct{}
-
-func (d *ProtocolParser) Clone() MsgParser {
-	return &ProtocolParser{}
-}
 
 /*
 协议
@@ -35,12 +31,13 @@ func genHeader(length int) string {
 	return fmt.Sprintf("version 0.1 length %d\n", length)
 }
 
-func (p *ProtocolParser) Decode(conn net.Conn) ([]byte, error) {
+func (p *ProtocolParser) Decode(conn io.ReadWriteCloser) ([]byte, error) {
 	var (
 		r        = bufio.NewReader(conn)
 		fieldMap = map[string]string{}
 		key      string
 	)
+
 	line, err := r.ReadString('\n')
 	if err != nil {
 		return nil, err

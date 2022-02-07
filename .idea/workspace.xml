@@ -20,15 +20,33 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d4010632-cc9d-49cc-9acd-2efff4a06ec3" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/main/config.toml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/proxy/client/config.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/proxy/server/config.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sd/config.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxy/client/compontent.go" beforeDir="false" afterPath="$PROJECT_DIR$/proxy/client/compontent.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxy/conf.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxy/proxy.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxy/server/server.go" beforeDir="false" afterPath="$PROJECT_DIR$/proxy/server/server.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/core/core.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/io/codec/codec.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/kit/recovery/recovery.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/kit/retry/retry.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rpc/client/client.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rpc/client/context.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rpc/client/factory.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rpc/client/opts.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rpc/client/pool.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rpc/client/socket.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rpc/codec/codec.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rpc/codec/gob_codec.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rpc/codec/json_codec.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rpc/codec/proto_codec.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rpc/internal/iosocket/opts.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rpc/internal/metadata/metadata.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/conf/toml_parse.go" beforeDir="false" afterPath="$PROJECT_DIR$/rpc/conf/toml_parse.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/net/net.go" beforeDir="false" afterPath="$PROJECT_DIR$/rpc/internal/iosocket/net.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/parse/delim_parser.go" beforeDir="false" afterPath="$PROJECT_DIR$/io/codec/delim_parser.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/parse/protocol_parser.go" beforeDir="false" afterPath="$PROJECT_DIR$/io/codec/protocol_parser.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/proxy/client/compontent.go" beforeDir="false" afterPath="$PROJECT_DIR$/rpc/client/compontent.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/proxy/client/config.go" beforeDir="false" afterPath="$PROJECT_DIR$/rpc/client/config.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/proxy/server/config.go" beforeDir="false" afterPath="$PROJECT_DIR$/rpc/server/config.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/proxy/server/server.go" beforeDir="false" afterPath="$PROJECT_DIR$/rpc/server/server.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sd/config.go" beforeDir="false" afterPath="$PROJECT_DIR$/sd/config.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sd/sd.go" beforeDir="false" afterPath="$PROJECT_DIR$/sd/sd.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/worker/clac.go" beforeDir="false" afterPath="$PROJECT_DIR$/worker/clac.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -65,11 +83,11 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/proxy/config" />
-      <recent name="$PROJECT_DIR$/proxy/client" />
-      <recent name="$PROJECT_DIR$/proxy/server" />
-      <recent name="$PROJECT_DIR$/proxy" />
-      <recent name="$PROJECT_DIR$/service_discover" />
+      <recent name="$PROJECT_DIR$/kit/recovery" />
+      <recent name="$PROJECT_DIR$/io" />
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/rpc/client" />
+      <recent name="$PROJECT_DIR$/rpc/internal" />
     </key>
   </component>
   <component name="RunManager">
@@ -105,29 +123,52 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state width="1398" height="386" key="GridCell.Tab.0.bottom" timestamp="1644060966306">
+    <state width="1398" height="282" key="GridCell.Tab.0.bottom" timestamp="1644119921239">
       <screen x="0" y="25" width="1440" height="875" />
     </state>
-    <state width="1398" height="386" key="GridCell.Tab.0.bottom/0.25.1440.875@0.25.1440.875" timestamp="1644060966306" />
-    <state width="1398" height="386" key="GridCell.Tab.0.center" timestamp="1644060966304">
+    <state width="1398" height="282" key="GridCell.Tab.0.bottom/0.25.1440.875@0.25.1440.875" timestamp="1644119921239" />
+    <state width="1398" height="282" key="GridCell.Tab.0.center" timestamp="1644119921237">
       <screen x="0" y="25" width="1440" height="875" />
     </state>
-    <state width="1398" height="386" key="GridCell.Tab.0.center/0.25.1440.875@0.25.1440.875" timestamp="1644060966304" />
-    <state width="1398" height="386" key="GridCell.Tab.0.left" timestamp="1644060966304">
+    <state width="1398" height="282" key="GridCell.Tab.0.center/0.25.1440.875@0.25.1440.875" timestamp="1644119921237" />
+    <state width="1398" height="282" key="GridCell.Tab.0.left" timestamp="1644119921236">
       <screen x="0" y="25" width="1440" height="875" />
     </state>
-    <state width="1398" height="386" key="GridCell.Tab.0.left/0.25.1440.875@0.25.1440.875" timestamp="1644060966304" />
-    <state width="1398" height="386" key="GridCell.Tab.0.right" timestamp="1644060966305">
+    <state width="1398" height="282" key="GridCell.Tab.0.left/0.25.1440.875@0.25.1440.875" timestamp="1644119921236" />
+    <state width="1398" height="282" key="GridCell.Tab.0.right" timestamp="1644119921238">
       <screen x="0" y="25" width="1440" height="875" />
     </state>
-    <state width="1398" height="386" key="GridCell.Tab.0.right/0.25.1440.875@0.25.1440.875" timestamp="1644060966305" />
-    <state width="500" height="445" key="SwitcherDM" timestamp="1643969316195">
+    <state width="1398" height="282" key="GridCell.Tab.0.right/0.25.1440.875@0.25.1440.875" timestamp="1644119921238" />
+    <state width="500" height="445" key="SwitcherDM" timestamp="1644217473736">
       <screen x="0" y="25" width="1440" height="875" />
     </state>
-    <state width="500" height="445" key="SwitcherDM/0.25.1440.875@0.25.1440.875" timestamp="1643969316195" />
-    <state x="421" y="217" width="775" height="490" key="find.popup" timestamp="1643993170975">
+    <state width="500" height="445" key="SwitcherDM/0.25.1440.875@0.25.1440.875" timestamp="1644217473736" />
+    <state x="521" y="380" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1644222587118">
       <screen x="0" y="25" width="1440" height="875" />
     </state>
-    <state x="421" y="217" width="775" height="490" key="find.popup/0.25.1440.875@0.25.1440.875" timestamp="1643993170975" />
+    <state x="521" y="380" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.25.1440.875@0.25.1440.875" timestamp="1644222587118" />
+    <state x="421" y="217" width="928" height="490" key="find.popup" timestamp="1644231371760">
+      <screen x="0" y="25" width="1440" height="875" />
+    </state>
+    <state x="421" y="217" width="928" height="490" key="find.popup/0.25.1440.875@0.25.1440.875" timestamp="1644231371760" />
+    <state width="600" height="428" key="javadoc.popup" timestamp="1644222577803">
+      <screen x="0" y="25" width="1440" height="875" />
+    </state>
+    <state width="600" height="428" key="javadoc.popup/0.25.1440.875@0.25.1440.875" timestamp="1644222577803" />
+    <state x="385" y="214" width="670" height="676" key="search.everywhere.popup" timestamp="1644224570225">
+      <screen x="0" y="25" width="1440" height="875" />
+    </state>
+    <state x="385" y="214" width="670" height="676" key="search.everywhere.popup/0.25.1440.875@0.25.1440.875" timestamp="1644224570225" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/sd/sd.go</url>
+          <line>15</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

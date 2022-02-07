@@ -1,6 +1,11 @@
 package sd
 
-import "log"
+import (
+	"context"
+	"errors"
+	"github.com/fuyao-w/sd/core"
+	"log"
+)
 
 var DefaultRegisterCenter ServiceDiscover
 
@@ -11,7 +16,6 @@ type RegisterCenter struct {
 
 func InitSd(cfg RegisterCenter) {
 	var (
-
 		err error
 	)
 	switch cfg.Type {
@@ -26,3 +30,13 @@ func InitSd(cfg RegisterCenter) {
 	}
 }
 
+func NewUpstream(serviceName string) core.Plugin {
+	return core.Function(func(ctx context.Context, d core.Drive) {
+		list := DefaultRegisterCenter.GetAddrSlice(serviceName)
+		if list == nil {
+			d.AbortErr(errors.New("no upstream"))
+			return
+		}
+
+	})
+}

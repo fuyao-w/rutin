@@ -1,8 +1,8 @@
 package worker
 
 import (
-	"github.com/fuyao-w/sd/proxy/client"
-	"github.com/fuyao-w/sd/proxy/server"
+	"github.com/fuyao-w/sd/rpc/proxy/client"
+	"github.com/fuyao-w/sd/rpc/proxy/server"
 )
 
 type ProxyHandle struct {

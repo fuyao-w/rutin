@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/fuyao-w/sd/net"
-	"github.com/fuyao-w/sd/parse"
+	"github.com/fuyao-w/sd/rpc/codec"
+	"github.com/fuyao-w/sd/rpc/net"
 	"github.com/fuyao-w/sd/utils"
 	"go/token"
 	"log"
@@ -14,11 +14,7 @@ import (
 )
 
 type (
-	HandlerDesc struct {
-		ServiceName string `json:"service_name"`
-		MethName    string `json:"meth_name"`
-		Param       []byte `json:"param"`
-	}
+
 	methodType struct {
 		//sync.Mutex // protects counters
 		method    reflect.Method
@@ -149,7 +145,7 @@ func RegisterHandle(handle ServerRegister) {
 
 func HandleConnection(conn netAddr.Conn) {
 	var (
-		parser = parse.ProtocolParser{}
+		parser = codec.ProtocolParser{}
 		desc   = HandlerDesc{}
 	)
 

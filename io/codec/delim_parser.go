@@ -1,4 +1,4 @@
-package parse
+package codec
 
 import (
 	"bufio"
@@ -7,13 +7,6 @@ import (
 	"net"
 	"strings"
 )
-
-type MsgParser interface {
-	Encode(content []byte) ([]byte, error)
-	Decode(conn net.Conn) ([]byte, error)
-	Close()
-	Clone() MsgParser
-}
 
 /*
 	自定义分隔符的解析器
@@ -26,9 +19,6 @@ type DelimParser struct {
 	Delim byte
 }
 
-func (d *DelimParser) Clone() MsgParser {
-	return &DelimParser{Delim: d.Delim}
-}
 
 func (d *DelimParser) Encode(content []byte) (bytes []byte, err error) {
 	for _, b := range content {

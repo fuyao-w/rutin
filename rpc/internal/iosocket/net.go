@@ -1,8 +1,8 @@
-package net
+package iosocket
 
 import (
 	"fmt"
-	"github.com/fuyao-w/sd/parse"
+	"github.com/fuyao-w/sd/rpc/codec"
 	"log"
 	"net"
 )
@@ -32,7 +32,7 @@ func Server(addr string, handle func(conn net.Conn)) {
 	}
 }
 
-func Client(addr string, msg []byte, parser parse.MsgParser) ([]byte, error) {
+func Client(addr string, msg []byte, parser codec.MsgCodec) ([]byte, error) {
 	conn, err := net.Dial("tcp", addr)
 	if err != nil {
 		fmt.Println("dial err")
