@@ -4,37 +4,74 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/fuyao-w/sd/rpc/codec"
-	"github.com/fuyao-w/sd/rpc/net"
-	"github.com/fuyao-w/sd/utils"
+	"github.com/fuyao-w/sd/rpc/internal/iosocket"
+	"github.com/fuyao-w/sd/sd"
+	"io"
+	"net"
+
+	"github.com/fuyao-w/sd/rpc/internal/metadata"
+	"sync"
+
 	"go/token"
 	"log"
-	netAddr "net"
 	"reflect"
 )
 
 type (
+	HandlerOption func(*HandlerOptions)
+
+	HandlerOptions struct {
+		HandlerName string
+	}
+	//Handler interface {
+	//	Name() string
+	//	Handler() interface{}
+	//}
+	Handler struct {
+		name    string
+		handler interface{}
+	}
+	Server interface {
+		NewHandler(interface{}, ...HandlerOption) Handler
+
+		// registe a Handler to server
+		Handle(Handler) error
+
+		// registe middlewares to a handler
+		Use(...Plugin) Server
+
+		Start() error
+		Stop() error
+
+		GetPaths() []string
+	}
 
 	methodType struct {
-		//sync.Mutex // protects counters
 		method    reflect.Method
 		ArgType   reflect.Type
 		ReplyType reflect.Type
-		//numCalls   uint
 	}
 	MethProc struct {
 		meth   reflect.Method
 		values []reflect.Value
 	}
 	Service struct {
-		methRegister map[string]*methodType
-		typ          reflect.Type
-		rcvr         reflect.Value
+		name string
+		meth map[string]*methodType
+		typ  reflect.Type
+		rcvr reflect.Value
 	}
-	Server struct {
-		Name string `json:"name"`
-		Port int    `json:"port"`
-		addr string `json:"addr"`
+
+	RpcServer struct {
+		options Options
+		//router
+		serviceMap map[string]*Service
+		plugins    []Plugin //熔断限流等插件
+		server     *iosocket.Server
+		shutdown   int32
+		stop       chan struct{}
+		once       sync.Once
+		sync.RWMutex
 	}
 
 	ServerRegister interface {
@@ -42,28 +79,102 @@ type (
 	}
 )
 
+func getPath(service, meth string) string {
+	return fmt.Sprintf("%s.%s", service, meth)
+}
+func (r *RpcServer) NewHandler(handler interface{}, opts ...HandlerOption) Handler {
+	var options HandlerOptions
+	for _, opt := range opts {
+		opt(&options)
+	}
+	return Handler{
+		name: func() string {
+			if options.HandlerName != "" {
+				return options.HandlerName
+			}
+			return reflect.Indirect(reflect.ValueOf(handler)).Type().Name()
+		}(),
+		handler: handler,
+	}
+}
+
+func (r *RpcServer) Handle(handler Handler) error {
+	if len(handler.name) == 0 {
+		return errors.New("handler don't have validate name")
+	}
+
+	_, ok := r.serviceMap[handler.name]
+	if ok {
+		return errors.New("service already exit")
+	}
+	typ := reflect.TypeOf(handler.handler)
+	rcvr := reflect.ValueOf(handler.handler)
+
+	if !isExportedOrBuiltinType(typ) {
+		return errors.New("handler is not exported or builtin type")
+	}
+	service := Service{
+		meth: suitableMethods(typ, false),
+		typ:  typ,
+		rcvr: rcvr,
+		name: handler.name,
+	}
+	r.Lock()
+	defer r.Unlock()
+	r.serviceMap[handler.name] = &service
+	return nil
+}
+
+func (r *RpcServer) Use(plugin ...Plugin) Server {
+	r.plugins = plugin
+	return r
+}
+
+func (r *RpcServer) Start() error {
+	//1. 服务发现注册
+	//2. 调用 iosocket.Server.Start()
+
+	l, err := net.Listen("tcp4", r.options.Address)
+	if err != nil {
+		//logging.GenLogf("start rpc server on %s failed, %v", h.opts.Address, e)
+		fmt.Printf("start rpc server on %s failed, %v\n", r.options.Address, err)
+		return err
+	}
+	for service := range r.serviceMap {
+		if err = sd.DefaultRegisterCenter.Register(service, r.options.Address); err != nil {
+			log.Printf("service discover register failed :%s ,name :%s", err, r.options.ServiceName)
+			l.Close()
+			return err
+		}
+	}
+	if err = r.server.Server.Start(l); err != nil {
+		return err
+	}
+	<-r.stop
+	return nil
+}
+
+func (r *RpcServer) Stop() error {
+	defer func() {
+		close(r.stop)
+	}()
+	//注销服务发现
+	r.server.Server.Stop()
+	return nil
+}
+
+func (r *RpcServer) GetPaths() (paths []string) {
+	for serviceName, service := range r.serviceMap {
+		for methName := range service.meth {
+			paths = append(paths, getPath(serviceName, methName))
+		}
+	}
+	return
+}
+
 var (
 	typeOfError = reflect.TypeOf((*error)(nil)).Elem()
-	serviceMap  = map[string]Service{}
 )
-
-func do(handle Service, desc HandlerDesc) (reply reflect.Value, err error) {
-	if meth, ok := handle.methRegister[desc.MethName]; !ok {
-		return reply, errors.New("meth not found")
-	} else {
-		arg := reflect.New(meth.ArgType)
-		reply = reflect.New(meth.ReplyType.Elem())
-		if err := json.Unmarshal(desc.Param, arg.Interface()); err != nil {
-			return reply, fmt.Errorf("do unmarshal err: %s", err.Error())
-		}
-		response := meth.method.Func.Call([]reflect.Value{handle.rcvr, arg.Elem(), reply})
-		if r := response[0].Interface(); r != nil {
-			err = r.(error)
-		}
-
-	}
-	return reply, err
-}
 
 func isExportedOrBuiltinType(t reflect.Type) bool {
 	for t.Kind() == reflect.Ptr {
@@ -132,45 +243,74 @@ func suitableMethods(typ reflect.Type, reportErr bool) map[string]*methodType {
 	}
 	return methods
 }
-func RegisterHandle(handle ServerRegister) {
-	typ := reflect.TypeOf(handle)
-	rcvr := reflect.ValueOf(handle)
-	fmt.Println("RegisterHandle", handle.Name())
-	serviceMap[handle.Name()] = Service{
-		methRegister: suitableMethods(typ, false),
-		typ:          typ,
-		rcvr:         rcvr,
-	}
-}
 
-func HandleConnection(conn netAddr.Conn) {
+func (r *RpcServer) handleConnection(body []byte, wc io.WriteCloser) {
 	var (
-		parser = codec.ProtocolParser{}
-		desc   = HandlerDesc{}
+		desc = metadata.HandlerDesc{}
 	)
-
-	defer conn.Close()
-	bytes, err := parser.Decode(conn) //解析tcp信息
-	if err = json.Unmarshal(bytes, &desc); err != nil {
-		log.Println("unmarshal err ", err)
+	desc, err := metadata.Parse(r.options.codec, body)
+	if err != nil {
+		log.Printf("handleConnection|Parse err %s", err)
 		return
 	}
-	handler, ok := serviceMap[desc.ServiceName]
+	//fmt.Printf("desc :%+v ,body : %s", desc, string(body))
+	handler, ok := r.serviceMap[desc.ServiceName]
 	if !ok {
 		log.Printf("service not found :%s", desc.ServiceName)
 		return
 	}
-	reply, err := do(handler, desc)
+	reply, err := r.call(*handler, desc)
 	if err != nil {
 		log.Printf("HandleConnection do err :%s", err)
 		return
 	}
 
-	bytes, err = parser.Encode(utils.GetJsonBytes(reply.Interface()))
-	conn.Write(bytes)
+	bytes, err := r.options.codec.Encode(reply.Interface())
+	if err != nil {
+		return
+	}
+	desc.Response = bytes
+	fmt.Println("handleConnection",string(bytes))
+	bytes, err = r.options.codec.Encode(desc)
+	wc.Write(bytes)
 }
 
-func BeginServer() {
-	s := DefaultServer
-	net.Server(s.addr, HandleConnection)
+func (h *RpcServer) serveRpc(remoteAddr string, request *iosocket.Context) (*iosocket.Context, error) {
+
+	return nil, nil
+}
+
+func (r *RpcServer) call(handle Service, desc metadata.HandlerDesc) (reply reflect.Value, err error) {
+	if meth, ok := handle.meth[desc.MethName]; !ok {
+		return reply, errors.New("meth not found")
+	} else {
+		arg := reflect.New(meth.ArgType)
+		reply = reflect.New(meth.ReplyType.Elem())
+		if err := json.Unmarshal(desc.Param, arg.Interface()); err != nil {
+			return reply, fmt.Errorf("do unmarshal err: %s", err.Error())
+		}
+		response := meth.method.Func.Call([]reflect.Value{handle.rcvr, arg.Elem(), reply})
+		if r := response[0].Interface(); r != nil {
+			err = r.(error)
+		}
+
+	}
+	return reply, err
+}
+
+func NewRpcServer(opts ...Option) Server {
+	var options Options
+	for _, opt := range opts {
+		opt(&options)
+	}
+	s := &RpcServer{
+		options:    options,
+		serviceMap: map[string]*Service{},
+		stop:       make(chan struct{}),
+		once:       sync.Once{},
+		RWMutex:    sync.RWMutex{},
+	}
+	s.server = iosocket.NewServer(s.handleConnection)
+
+	return s
 }

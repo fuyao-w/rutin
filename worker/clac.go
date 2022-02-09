@@ -1,27 +1,28 @@
 package worker
 
 import (
-	"github.com/fuyao-w/sd/rpc/proxy/client"
-	"github.com/fuyao-w/sd/rpc/proxy/server"
+	"context"
+	"github.com/fuyao-w/sd/rpc/client"
 )
 
 type ProxyHandle struct {
-	//client *client.Client
+	client client.NetClient
 }
 
-const serviceName = "calc"
+const serviceName = "Handle"
 
 func (p *ProxyHandle) Name() string {
 	return "calc"
 }
 
-func InitProxyHandle(name string) *ProxyHandle {
-	return &ProxyHandle{}
+func InitProxyHandle() *ProxyHandle {
+	return &ProxyHandle{
+		client: client.RpcClient(serviceName),
+	}
 }
 
 func InitHandle() (handle *Handle) {
 	handle = &Handle{}
-	server.RegisterHandle(handle)
 	return handle
 }
 
@@ -38,5 +39,5 @@ type ClacResp struct {
 }
 
 func (p *ProxyHandle) Calc(req ClacReq, calcResp *ClacResp) error {
-	return client.Call(p.Name(), "Calc", req, calcResp)
+	return p.client.Invoke(context.TODO(), "Handle.Calc", req, calcResp)
 }

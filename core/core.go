@@ -14,58 +14,69 @@ type Drive interface {
 	Reset(idx int)
 }
 
-type Driver struct {
-	plugins []Plugin
-	idx     int
-}
-
-func (d Driver) Use(plugin ...Plugin) Drive {
-	panic("implement me")
-}
-
-func (d Driver) Next(ctx context.Context) {
-	panic("implement me")
-}
-
-func (d Driver) AbortErr(err error) {
-	panic("implement me")
-}
-
-func (d Driver) Abort() {
-	panic("implement me")
-}
-
-func (d Driver) IsAborted() bool {
-	panic("implement me")
-}
-
-func (d Driver) Err() error {
-	panic("implement me")
-}
-
-func (d Driver) Copy() Drive {
-	panic("implement me")
-}
-
-func (d Driver) Index() int {
-	panic("implement me")
-}
-
-func (d Driver) Reset(idx int) {
-	panic("implement me")
-}
-
-func New(plugins []Plugin) Driver {
-	return Driver{
+func New(plugins []Plugin) Drive {
+	return &Driver{
+		index:   -1,
 		plugins: plugins,
-		idx:     -1,
 	}
 }
 
-type Plugin interface {
-	Do(ctx context.Context, core Drive)
+type Driver struct {
+	plugins []Plugin
+	index   int
+	err     error
 }
 
-type Function func(ctx context.Context, core Drive)
+// Deprecated: Copy, just use Index()
+func (d *Driver) Copy() Drive {
+	dup := &Driver{}
+	dup.index = d.index
+	dup.plugins = append(d.plugins[:0:0], d.plugins...)
+	return dup
+}
 
-func (f Function) Do(context.Context, Drive) {}
+func (d *Driver) Use(ps ...Plugin) Drive {
+	d.plugins = append(d.plugins, ps...)
+	return d
+}
+
+func (d *Driver) Next(ctx context.Context) {
+	d.index++
+	for s := len(d.plugins); d.index < s; d.index++ {
+		d.plugins[d.index].Do(ctx, d)
+	}
+}
+
+func (d *Driver) Abort() {
+	d.index = len(d.plugins)
+}
+
+func (d *Driver) AbortErr(err error) {
+	d.Abort()
+	d.err = err
+}
+
+func (d *Driver) Err() error {
+	return d.err
+}
+
+func (d *Driver) IsAborted() bool {
+	return d.index >= len(d.plugins)
+}
+
+func (d *Driver) Index() int {
+	return d.index
+}
+
+func (d *Driver) Reset(n int) {
+	d.index = n
+	d.err = nil
+}
+
+type Plugin interface {
+	Do(ctx context.Context, Driver Drive)
+}
+
+type Function func(ctx context.Context, Driver Drive)
+
+func (f Function) Do(ctx context.Context, d Drive) { f(ctx, d) }

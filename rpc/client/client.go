@@ -3,8 +3,7 @@ package client
 import (
 	"context"
 	"github.com/fuyao-w/sd/core"
-	"github.com/fuyao-w/sd/kit/recovery"
-	"github.com/fuyao-w/sd/kit/retry"
+	"github.com/fuyao-w/sd/sd"
 )
 
 type NetClient interface {
@@ -13,19 +12,31 @@ type NetClient interface {
 
 type generalClient struct {
 	options       Options
-	RpcMeth       string //调用的 RPC 方法
+	serviceName   string //调用的 RPC 方法
 	defaultDriver core.Drive
 }
 
-func NewGeneralClient(rpcMeth string, options Options) *generalClient {
+func (g *generalClient) Invoke(ctx context.Context, methName string, in, out interface{}) error {
+	driver := g.defaultDriver.Copy()
+	driver.Next(context.WithValue(ctx, rpcContextKey, &RpcContext{
+		ServiceName: g.serviceName,
+		EndPoint:    methName,
+		Request:     in,
+		Response:    out,
+	}))
+	return driver.Err()
+}
+
+func newGeneralClient(factory sd.PluginFactory, serviceName string, options Options) *generalClient {
 	plugins := []core.Plugin{
-		recovery.Recover(),
-		retry.Retry(options.RetryTimes),
+		//recovery.Recover(),
+		//retry.Retry(options.RetryTimes),
+		sd.NewUpStream(factory, serviceName),
 	}
 
 	return &generalClient{
 		options:       options,
-		RpcMeth:       rpcMeth,
+		serviceName:   serviceName,
 		defaultDriver: core.New(plugins),
 	}
 }

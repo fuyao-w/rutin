@@ -1,4 +1,4 @@
-package codec
+package iokit
 
 import (
 	"bufio"
@@ -11,27 +11,7 @@ import (
 
 type ProtocolParser struct{}
 
-/*
-协议
-header\n
-content
-
-header 内容：版本 content 长度（字节数）
-version 1.1 length 10093
-*/
-func (p *ProtocolParser) Encode(content []byte) ([]byte, error) {
-	var builder strings.Builder
-	content = append(content, '\n')
-	builder.WriteString(genHeader(len(content)))
-	builder.Write(content)
-	return []byte(builder.String()), nil
-}
-
-func genHeader(length int) string {
-	return fmt.Sprintf("version 0.1 length %d\n", length)
-}
-
-func (p *ProtocolParser) Decode(conn io.ReadWriteCloser) ([]byte, error) {
+func (p *ProtocolParser) Decode(conn io.ReadCloser) ([]byte, error) {
 	var (
 		r        = bufio.NewReader(conn)
 		fieldMap = map[string]string{}
@@ -71,6 +51,23 @@ func (p *ProtocolParser) Decode(conn io.ReadWriteCloser) ([]byte, error) {
 	return buf[:len(buf)-1], err
 }
 
-func (p *ProtocolParser) Close() {
+/*
+协议
+header\n
+content
 
+header 内容：版本 content 长度（字节数）
+version 1.1 length 10093
+*/
+func (p *ProtocolParser) Encode(content []byte) ([]byte, error) {
+	//fmt.Println("----ENCODe----",string(content))
+	var builder strings.Builder
+	content = append(content, '\n')
+	builder.WriteString(genHeader(len(content)))
+	builder.Write(content)
+	return []byte(builder.String()), nil
+}
+
+func genHeader(length int) string {
+	return fmt.Sprintf("version 0.1 length %d\n", length)
 }

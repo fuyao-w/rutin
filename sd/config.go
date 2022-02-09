@@ -1,9 +1,6 @@
 package sd
 
 import (
-	"context"
-	"errors"
-	"github.com/fuyao-w/sd/core"
 	"log"
 )
 
@@ -28,15 +25,4 @@ func InitSd(cfg RegisterCenter) {
 	if err != nil {
 		log.Fatalf("service init register err :%s\n", err.Error())
 	}
-}
-
-func NewUpstream(serviceName string) core.Plugin {
-	return core.Function(func(ctx context.Context, d core.Drive) {
-		list := DefaultRegisterCenter.GetAddrSlice(serviceName)
-		if list == nil {
-			d.AbortErr(errors.New("no upstream"))
-			return
-		}
-
-	})
 }

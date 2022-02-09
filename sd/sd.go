@@ -12,7 +12,7 @@ type ServiceDiscover interface {
 	GetAddrSlice(name string) (arrs []string)
 }
 
-type SdPluginFactory interface {
+type PluginFactory interface {
 	Factory(host string) (core.Plugin, error)
 }
 
