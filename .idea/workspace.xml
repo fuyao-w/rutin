@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="ALL" />
+  </component>
+  <component name="BookmarksViewState">
+    <option name="rewriteBookmarkType" value="true" />
+  </component>
   <component name="BranchesTreeState">
     <expand>
       <path>
@@ -20,34 +26,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d4010632-cc9d-49cc-9acd-2efff4a06ec3" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/iokit/channel.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/iokit/kit.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/iokit/server.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/rpc/internal/iosocket/server.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/rpc/internal/iosocket/socket.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/rpc/server/context.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sd/upstream.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/iokit/seq_packet_parser.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/core.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/core.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/io/codec/codec.go" beforeDir="false" afterPath="$PROJECT_DIR$/iokit/codec.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/io/codec/delim_parser.go" beforeDir="false" afterPath="$PROJECT_DIR$/iokit/delim_parser.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/io/codec/protocol_parser.go" beforeDir="false" afterPath="$PROJECT_DIR$/iokit/protocol_parser.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/iokit/channel.go" beforeDir="false" afterPath="$PROJECT_DIR$/iokit/channel.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/iokit/codec.go" beforeDir="false" afterPath="$PROJECT_DIR$/iokit/codec.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kit/recovery/recovery.go" beforeDir="false" afterPath="$PROJECT_DIR$/kit/recovery/recovery.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kit/retry/retry.go" beforeDir="false" afterPath="$PROJECT_DIR$/kit/retry/retry.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main/main.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rpc/client/client.go" beforeDir="false" afterPath="$PROJECT_DIR$/rpc/client/client.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc/client/compontent.go" beforeDir="false" afterPath="$PROJECT_DIR$/rpc/client/compontent.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc/client/config.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc/client/factory.go" beforeDir="false" afterPath="$PROJECT_DIR$/rpc/client/factory.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc/client/opts.go" beforeDir="false" afterPath="$PROJECT_DIR$/rpc/client/opts.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc/client/pool.go" beforeDir="false" afterPath="$PROJECT_DIR$/rpc/client/pool.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rpc/client/socket.go" beforeDir="false" afterPath="$PROJECT_DIR$/rpc/client/socket.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc/internal/iosocket/net.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc/internal/iosocket/opts.go" beforeDir="false" afterPath="$PROJECT_DIR$/rpc/internal/iosocket/context.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc/internal/metadata/metadata.go" beforeDir="false" afterPath="$PROJECT_DIR$/rpc/internal/metadata/metadata.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc/server/config.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc/internal/iosocket/context.go" beforeDir="false" afterPath="$PROJECT_DIR$/rpc/internal/iosocket/context.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc/internal/iosocket/socket.go" beforeDir="false" afterPath="$PROJECT_DIR$/rpc/internal/iosocket/socket.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rpc/server/server.go" beforeDir="false" afterPath="$PROJECT_DIR$/rpc/server/server.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sd/config.go" beforeDir="false" afterPath="$PROJECT_DIR$/sd/config.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sd/sd.go" beforeDir="false" afterPath="$PROJECT_DIR$/sd/sd.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/worker/clac.go" beforeDir="false" afterPath="$PROJECT_DIR$/worker/clac.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sd/upstream.go" beforeDir="false" afterPath="$PROJECT_DIR$/sd/upstream.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -61,9 +53,12 @@
       </list>
     </option>
   </component>
-  <component name="GOROOT" path="/usr/local/Cellar/go/1.16.4/libexec" />
+  <component name="GOROOT" url="file:///usr/local/Cellar/go/1.17.6/libexec" />
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectId" id="24PWqHR5rfwXbjc3UeMEsfZOK4I" />
   <component name="ProjectViewState">
@@ -74,12 +69,19 @@
   <component name="PropertiesComponent">
     <property name="DefaultGoTemplateProperty" value="Go File" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="configurable..is.expanded" value="false" />
+    <property name="configurable.GoLibrariesConfigurable.is.expanded" value="true" />
+    <property name="go.format.on.save.advertiser.fired" value="true" />
+    <property name="go.formatter.settings.were.checked" value="true" />
     <property name="go.import.settings.migrated" value="true" />
+    <property name="go.modules.go.list.on.any.changes.was.set" value="true" />
     <property name="go.sdk.automatically.set" value="true" />
+    <property name="go.watchers.conflict.with.on.save.actions.check.performed" value="true" />
     <property name="last.edited.regexp" value="// a" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -95,9 +97,9 @@
       <module name="sd" />
       <working_directory value="$PROJECT_DIR$" />
       <kind value="PACKAGE" />
-      <filePath value="$PROJECT_DIR$/main/main.go" />
       <package value="github.com/fuyao-w/sd/main" />
       <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$/main/main.go" />
       <method v="2" />
     </configuration>
     <recent_temporary>
@@ -120,80 +122,13 @@
         </entry>
       </map>
     </option>
-    <option name="oldMeFiltersMigrated" value="true" />
-  </component>
-  <component name="WindowStateProjectService">
-    <state x="446" y="290" key="#Notifications" timestamp="1644405703577">
-      <screen x="0" y="25" width="1440" height="875" />
-    </state>
-    <state x="446" y="290" key="#Notifications/0.25.1440.875@0.25.1440.875" timestamp="1644405703577" />
-    <state x="498" y="173" key="#com.intellij.ide.util.MemberChooser" timestamp="1644290253380">
-      <screen x="0" y="25" width="1440" height="875" />
-    </state>
-    <state x="498" y="173" key="#com.intellij.ide.util.MemberChooser/0.25.1440.875@0.25.1440.875" timestamp="1644290253380" />
-    <state width="1398" height="398" key="GridCell.Tab.0.bottom" timestamp="1644419446942">
-      <screen x="0" y="25" width="1440" height="875" />
-    </state>
-    <state width="1398" height="398" key="GridCell.Tab.0.bottom/0.25.1440.875@0.25.1440.875" timestamp="1644419446942" />
-    <state width="1398" height="398" key="GridCell.Tab.0.center" timestamp="1644419446941">
-      <screen x="0" y="25" width="1440" height="875" />
-    </state>
-    <state width="1398" height="398" key="GridCell.Tab.0.center/0.25.1440.875@0.25.1440.875" timestamp="1644419446941" />
-    <state width="1398" height="398" key="GridCell.Tab.0.left" timestamp="1644419446941">
-      <screen x="0" y="25" width="1440" height="875" />
-    </state>
-    <state width="1398" height="398" key="GridCell.Tab.0.left/0.25.1440.875@0.25.1440.875" timestamp="1644419446941" />
-    <state width="1398" height="398" key="GridCell.Tab.0.right" timestamp="1644419446941">
-      <screen x="0" y="25" width="1440" height="875" />
-    </state>
-    <state width="1398" height="398" key="GridCell.Tab.0.right/0.25.1440.875@0.25.1440.875" timestamp="1644419446941" />
-    <state width="1398" height="342" key="GridCell.Tab.1.bottom" timestamp="1644419203923">
-      <screen x="0" y="25" width="1440" height="875" />
-    </state>
-    <state width="1398" height="342" key="GridCell.Tab.1.bottom/0.25.1440.875@0.25.1440.875" timestamp="1644419203923" />
-    <state width="1398" height="342" key="GridCell.Tab.1.center" timestamp="1644419203923">
-      <screen x="0" y="25" width="1440" height="875" />
-    </state>
-    <state width="1398" height="342" key="GridCell.Tab.1.center/0.25.1440.875@0.25.1440.875" timestamp="1644419203923" />
-    <state width="1398" height="342" key="GridCell.Tab.1.left" timestamp="1644419203923">
-      <screen x="0" y="25" width="1440" height="875" />
-    </state>
-    <state width="1398" height="342" key="GridCell.Tab.1.left/0.25.1440.875@0.25.1440.875" timestamp="1644419203923" />
-    <state width="1398" height="342" key="GridCell.Tab.1.right" timestamp="1644419203923">
-      <screen x="0" y="25" width="1440" height="875" />
-    </state>
-    <state width="1398" height="342" key="GridCell.Tab.1.right/0.25.1440.875@0.25.1440.875" timestamp="1644419203923" />
-    <state x="229" y="98" key="SettingsEditor" timestamp="1644418236172">
-      <screen x="0" y="25" width="1440" height="875" />
-    </state>
-    <state x="229" y="98" key="SettingsEditor/0.25.1440.875@0.25.1440.875" timestamp="1644418236172" />
-    <state width="500" height="445" key="SwitcherDM" timestamp="1644217473736">
-      <screen x="0" y="25" width="1440" height="875" />
-    </state>
-    <state width="500" height="445" key="SwitcherDM/0.25.1440.875@0.25.1440.875" timestamp="1644217473736" />
-    <state x="521" y="380" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1644222587118">
-      <screen x="0" y="25" width="1440" height="875" />
-    </state>
-    <state x="521" y="380" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.25.1440.875@0.25.1440.875" timestamp="1644222587118" />
-    <state x="421" y="217" width="928" height="490" key="find.popup" timestamp="1644419376526">
-      <screen x="0" y="25" width="1440" height="875" />
-    </state>
-    <state x="421" y="217" width="928" height="490" key="find.popup/0.25.1440.875@0.25.1440.875" timestamp="1644419376526" />
-    <state width="600" height="428" key="javadoc.popup" timestamp="1644417504567">
-      <screen x="0" y="25" width="1440" height="875" />
-    </state>
-    <state width="600" height="428" key="javadoc.popup/0.25.1440.875@0.25.1440.875" timestamp="1644417504567" />
-    <state x="385" y="214" width="670" height="676" key="search.everywhere.popup" timestamp="1644411962483">
-      <screen x="0" y="25" width="1440" height="875" />
-    </state>
-    <state x="385" y="214" width="670" height="676" key="search.everywhere.popup/0.25.1440.875@0.25.1440.875" timestamp="1644411962483" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/sd/upstream.go</url>
-          <line>12</line>
+          <line>13</line>
           <option name="timeStamp" value="19" />
         </line-breakpoint>
       </breakpoints>

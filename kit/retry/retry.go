@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/fuyao-w/sd/core"
+	"log"
 	"strings"
 )
 
@@ -38,12 +39,12 @@ func Retry(max int) core.Plugin {
 			d.Reset(idx)
 			d.Next(ctx)
 			err := d.Err()
-			if err != nil {
-				d.Abort()
+			if err == nil {
 				return
 			}
 			switch e := err.(type) {
 			case BreakError:
+				log.Printf("Retry|BreakError err %s", e.Err)
 				d.AbortErr(e.Err)
 				return
 			default:
@@ -52,6 +53,7 @@ func Retry(max int) core.Plugin {
 
 			}
 		}
+		log.Printf("Retry|retryError err %s", retryError)
 		d.AbortErr(retryError)
 
 	})

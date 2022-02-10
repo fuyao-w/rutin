@@ -2,6 +2,7 @@ package sd
 
 import (
 	"context"
+	"errors"
 	"github.com/fuyao-w/sd/core"
 	"log"
 )
@@ -11,17 +12,19 @@ func NewUpStream(fac PluginFactory, name string) core.Plugin {
 		arrs := DefaultRegisterCenter.GetAddrSlice(name)
 		if len(arrs) == 0 {
 			log.Printf("client no upstream")
+			core.AbortErr(errors.New("no upstream"))
 			return
 		}
 		plugin, err := fac.Factory(arrs[0])
 		if err != nil {
+			log.Printf("NewUpStream|Factory err %s", err)
 			core.AbortErr(err)
 			return
 		}
 		plugin.Do(ctx, core)
 		core.Next(ctx)
 		if core.Err() != nil {
-			log.Printf("call failed", core.Err())
+			log.Printf("NewUpStream|core.Err call failed %s", core.Err())
 		}
 	})
 }

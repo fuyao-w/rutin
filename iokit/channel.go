@@ -139,9 +139,9 @@ func (c *Channel) readLoop() {
 	for {
 		select {
 		case <-c.cancelCtx.Done():
+			log.Print("readloop|cancelCtx ")
 			return
 		default:
-
 			body, err := c.options.codec.Decode(c.conn)
 			if err != nil {
 				log.Printf("readLoop|Decode err %s", err)
@@ -150,9 +150,7 @@ func (c *Channel) readLoop() {
 					continue
 				}
 				return
-
 			}
-			fmt.Printf("readloop :%s\n", c.options.handlerEntry.HandlerFunc == nil)
 
 			c.handleC <- &MsgHandler{
 				Msg:     body,
@@ -168,13 +166,6 @@ func (c *Channel) writeLoop() {
 		case <-c.cancelCtx.Done():
 			return
 		case info := <-c.writeC:
-			//fmt.Println("resdfsdf\n", string(info),"\n")
-			//body, err := c.options.codec.Encode(info)
-			//if err != nil {
-			//	log.Printf("handleLoop|Encode err %s", err)
-			//	continue
-			//}
-
 			c.writer.Write(info)
 			c.writer.Flush()
 
@@ -188,7 +179,7 @@ func (c *Channel) handleLoop() {
 		case <-c.cancelCtx.Done():
 			return
 		case m := <-c.handleC:
-
+			//fmt.Println("handleLoop", string(m.Msg))
 			m.Handler.HandlerFunc(m.Msg, c)
 		}
 	}

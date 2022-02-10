@@ -35,17 +35,18 @@ func main() {
 		fmt.Println(server.GetPaths())
 		server.Start()
 	}()
-	time.Sleep(time.Millisecond*40)
+	time.Sleep(time.Millisecond * 40)
 	handle := worker.InitProxyHandle()
 	var resp worker.ClacResp
-	fmt.Println(handle.Calc(worker.ClacReq{
-		A: 1,
-		B: 2,
-	}, &resp))
-	fmt.Printf("resp",resp.Result)
+	for i := 0; i < 100; i++ {
 
+		fmt.Println(handle.Calc(worker.ClacReq{
+			A: 1,
+			B: 2,
+		}, &resp))
 
-
+		fmt.Printf("%d resp :%+v\n", i, resp)
+	}
 
 	//go func() {
 	//

@@ -4,12 +4,12 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/fuyao-w/sd/iokit"
 	"github.com/fuyao-w/sd/rpc/internal/iosocket"
+	"github.com/fuyao-w/sd/rpc/internal/metadata"
 	"github.com/fuyao-w/sd/sd"
 	"io"
 	"net"
-
-	"github.com/fuyao-w/sd/rpc/internal/metadata"
 	"sync"
 
 	"go/token"
@@ -247,16 +247,22 @@ func suitableMethods(typ reflect.Type, reportErr bool) map[string]*methodType {
 func (r *RpcServer) handleConnection(body []byte, wc io.WriteCloser) {
 	var (
 		desc = metadata.HandlerDesc{}
+		pck  iokit.SeqPacket
 	)
-	desc, err := metadata.Parse(r.options.codec, body)
+
+	if err := pck.Decode(body); err != nil {
+		fmt.Println("Decode err", err)
+		return
+	}
+
+	desc, err := metadata.Parse(r.options.codec, pck.Payload)
 	if err != nil {
 		log.Printf("handleConnection|Parse err %s", err)
 		return
 	}
-	//fmt.Printf("desc :%+v ,body : %s", desc, string(body))
 	handler, ok := r.serviceMap[desc.ServiceName]
 	if !ok {
-		log.Printf("service not found :%s", desc.ServiceName)
+		log.Printf("handleConnection|service not found :%s", desc.ServiceName)
 		return
 	}
 	reply, err := r.call(*handler, desc)
@@ -269,9 +275,17 @@ func (r *RpcServer) handleConnection(body []byte, wc io.WriteCloser) {
 	if err != nil {
 		return
 	}
+	//iokit.SeqPacket{}
 	desc.Response = bytes
-	fmt.Println("handleConnection",string(bytes))
-	bytes, err = r.options.codec.Encode(desc)
+
+	pck.Payload, err = r.options.codec.Encode(desc)
+	if err != nil {
+		return
+	}
+	bytes, err = pck.Encode()
+	if err != nil {
+		return
+	}
 	wc.Write(bytes)
 }
 

@@ -1,13 +1,14 @@
 package client
 
 import (
+	"errors"
 	"github.com/fuyao-w/sd/rpc/codec"
 	"github.com/fuyao-w/sd/rpc/internal/iosocket"
 	"github.com/fuyao-w/sd/rpc/internal/metadata"
 	"log"
-	"strings"
-
 	"net"
+	"strings"
+	"sync/atomic"
 	"time"
 )
 
@@ -36,23 +37,21 @@ func initRpcSocket(conn net.Conn, options Options) *RpcSocket {
 
 func (r *RpcSocket) Call(endpoint string, payload []byte) ([]byte, error) {
 	arr := strings.Split(endpoint, ".")
+	if len(arr) != 2 {
+		return nil, errors.New("endpoint format err .right format : serviceName.methName")
+	}
 	metaDate := metadata.HandlerDesc{
 		ServiceName: arr[0],
 		MethName:    arr[1],
 		Param:       payload,
-		//SeqID:       r.socket.SeqID,
+		SeqID:       atomic.AddUint64(&r.socket.SeqID, 1),
 	}
-	bytes, err := r.codec.Encode(metaDate)
+	body, err := r.socket.Call(metaDate)
 	if err != nil {
+		log.Printf("RpcSocket|Call err %s", err)
 		return nil, err
 	}
-
-	body, err := r.socket.Call(&iosocket.Body{Payload: bytes})
-	if err != nil {
-
-		return nil, err
-	}
-	log.Printf("RpcSocket|Call err %s", body.Payload)
+	//log.Printf("RpcSocket|Call Payload %s", body.Payload)
 	return body.Payload, err
 }
 
