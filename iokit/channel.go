@@ -15,7 +15,12 @@ import (
 
 var (
 	ErrServerClosed = errors.New("server closed")
-	ErrWouldBlock   = errors.New("writer chan blocked")
+	ErrWouldBlock   = errors.New("writer chan blocked") //fast fail
+)
+
+const (
+	defaultWriterBufferSize  = 32
+	defaultHandlerBufferSize = defaultWriterBufferSize >> 1
 )
 
 type channelOptions struct {
@@ -32,10 +37,11 @@ type Channel struct {
 	//codec      MsgCodec
 	lastActive int64
 	closed     int32
-	writeC     chan []byte
-	handleC    chan *MsgHandler
-	wg         sync.WaitGroup
-	once       sync.Once //Close 的时候用
+	//收发的 chan 都必须有足够的缓冲区，防止异步的写请求到来时因阻塞造成的 fast fail
+	writeC  chan []byte
+	handleC chan *MsgHandler
+	wg      sync.WaitGroup
+	once    sync.Once //Close 的时候用
 }
 
 type ClientChannel struct {
@@ -58,6 +64,7 @@ func (c *ServerChannel) Close() error {
 }
 
 func (c *Channel) Write(p []byte) (n int, err error) {
+	//http.Client{}.Do()
 	if atomic.LoadInt32(&c.closed) == 1 {
 		return 0, ErrServerClosed
 	}
@@ -78,6 +85,7 @@ func (c *Channel) Write(p []byte) (n int, err error) {
 		err = nil
 		//fmt.Println("writeloop" ,string(bytes))
 	default:
+
 		err = ErrWouldBlock
 	}
 	return len(p), err
@@ -98,14 +106,11 @@ func (c *Channel) Close() error {
 }
 
 func NewServerChannel(conn net.Conn, connID uint64, options channelOptions) *ServerChannel {
-
 	return &ServerChannel{
 		Channel: (&Channel{
 			options: options,
 			connID:  connID,
 			conn:    conn,
-			writeC:  make(chan []byte),
-			handleC: make(chan *MsgHandler),
 		}).Init(),
 	}
 }
@@ -144,7 +149,7 @@ func (c *Channel) readLoop() {
 
 			body, err := c.options.codec.Decode(c.conn)
 			if err != nil {
-				log.Printf("readLoop|Decode err %s", err)
+				//log.Printf("readLoop|Decode err %s", err)
 				if err, ok := err.(net.Error); ok && err.Temporary() {
 					time.Sleep(time.Second)
 					continue
@@ -152,7 +157,7 @@ func (c *Channel) readLoop() {
 				return
 
 			}
-			fmt.Printf("readloop :%s\n", c.options.handlerEntry.HandlerFunc == nil)
+			//fmt.Printf("readloop :%s\n", c.options.handlerEntry.HandlerFunc == nil)
 
 			c.handleC <- &MsgHandler{
 				Msg:     body,
@@ -163,11 +168,13 @@ func (c *Channel) readLoop() {
 }
 func (c *Channel) writeLoop() {
 	defer c.deferProc("writeLoop", &c.wg)
+
 	for {
 		select {
 		case <-c.cancelCtx.Done():
 			return
 		case info := <-c.writeC:
+
 			//fmt.Println("resdfsdf\n", string(info),"\n")
 			//body, err := c.options.codec.Encode(info)
 			//if err != nil {
@@ -177,7 +184,8 @@ func (c *Channel) writeLoop() {
 
 			c.writer.Write(info)
 			c.writer.Flush()
-
+			//default: 测试用
+			//	log.Println("writeloop blocked")
 		}
 	}
 }
@@ -188,7 +196,6 @@ func (c *Channel) handleLoop() {
 		case <-c.cancelCtx.Done():
 			return
 		case m := <-c.handleC:
-
 			m.Handler.HandlerFunc(m.Msg, c)
 		}
 	}
@@ -202,6 +209,8 @@ func (c *Channel) Start() {
 }
 
 func (c *Channel) Init() *Channel {
+	c.writeC = make(chan []byte, defaultWriterBufferSize)
+	c.handleC = make(chan *MsgHandler, defaultHandlerBufferSize)
 	c.cancelCtx, c.cancel = context.WithCancel(context.TODO())
 	c.writer = bufio.NewWriter(c.conn)
 	c.reader = bufio.NewReader(c.conn)

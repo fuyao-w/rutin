@@ -23,7 +23,7 @@ func init() {
 	//	Port: 10010,
 	//})
 }
-func main() {
+func main1() {
 	//client := worker.InitProxyHandle()
 	go func() {
 		handler := worker.InitHandle()
@@ -35,17 +35,16 @@ func main() {
 		fmt.Println(server.GetPaths())
 		server.Start()
 	}()
-	time.Sleep(time.Millisecond*40)
+	time.Sleep(time.Millisecond * 40)
 	handle := worker.InitProxyHandle()
-	var resp worker.ClacResp
-	fmt.Println(handle.Calc(worker.ClacReq{
-		A: 1,
-		B: 2,
-	}, &resp))
-	fmt.Printf("resp",resp.Result)
-
-
-
+	for i := 0; i < 100; i++ {
+		var resp worker.ClacResp
+		fmt.Println("clac err",handle.Calc(worker.ClacReq{
+			A: 1,
+			B: 2,
+		}, &resp))
+		fmt.Printf("resp :%v ,%d\n", resp.Result, i)
+	}
 
 	//go func() {
 	//

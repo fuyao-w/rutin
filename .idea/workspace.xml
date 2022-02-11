@@ -20,34 +20,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d4010632-cc9d-49cc-9acd-2efff4a06ec3" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/iokit/channel.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/iokit/kit.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/iokit/server.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/rpc/internal/iosocket/server.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/rpc/internal/iosocket/socket.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/rpc/server/context.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sd/upstream.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/core.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/core.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/io/codec/codec.go" beforeDir="false" afterPath="$PROJECT_DIR$/iokit/codec.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/io/codec/delim_parser.go" beforeDir="false" afterPath="$PROJECT_DIR$/iokit/delim_parser.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/io/codec/protocol_parser.go" beforeDir="false" afterPath="$PROJECT_DIR$/iokit/protocol_parser.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/iokit/channel.go" beforeDir="false" afterPath="$PROJECT_DIR$/iokit/channel.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/iokit/server.go" beforeDir="false" afterPath="$PROJECT_DIR$/iokit/server.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc/client/client.go" beforeDir="false" afterPath="$PROJECT_DIR$/rpc/client/client.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc/client/compontent.go" beforeDir="false" afterPath="$PROJECT_DIR$/rpc/client/compontent.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc/client/config.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc/client/factory.go" beforeDir="false" afterPath="$PROJECT_DIR$/rpc/client/factory.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc/client/opts.go" beforeDir="false" afterPath="$PROJECT_DIR$/rpc/client/opts.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rpc/client/pool.go" beforeDir="false" afterPath="$PROJECT_DIR$/rpc/client/pool.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rpc/client/socket.go" beforeDir="false" afterPath="$PROJECT_DIR$/rpc/client/socket.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc/internal/iosocket/net.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc/internal/iosocket/opts.go" beforeDir="false" afterPath="$PROJECT_DIR$/rpc/internal/iosocket/context.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc/internal/metadata/metadata.go" beforeDir="false" afterPath="$PROJECT_DIR$/rpc/internal/metadata/metadata.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc/server/config.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc/internal/iosocket/socket.go" beforeDir="false" afterPath="$PROJECT_DIR$/rpc/internal/iosocket/socket.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rpc/server/server.go" beforeDir="false" afterPath="$PROJECT_DIR$/rpc/server/server.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sd/config.go" beforeDir="false" afterPath="$PROJECT_DIR$/sd/config.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sd/sd.go" beforeDir="false" afterPath="$PROJECT_DIR$/sd/sd.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/worker/clac.go" beforeDir="false" afterPath="$PROJECT_DIR$/worker/clac.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -79,7 +59,8 @@
     <property name="go.sdk.automatically.set" value="true" />
     <property name="last.edited.regexp" value="// a" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+    <property name="restartRequiresConfirmation" value="false" />
+    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -131,42 +112,42 @@
       <screen x="0" y="25" width="1440" height="875" />
     </state>
     <state x="498" y="173" key="#com.intellij.ide.util.MemberChooser/0.25.1440.875@0.25.1440.875" timestamp="1644290253380" />
-    <state width="1398" height="398" key="GridCell.Tab.0.bottom" timestamp="1644419446942">
+    <state width="1398" height="269" key="GridCell.Tab.0.bottom" timestamp="1644561394547">
       <screen x="0" y="25" width="1440" height="875" />
     </state>
-    <state width="1398" height="398" key="GridCell.Tab.0.bottom/0.25.1440.875@0.25.1440.875" timestamp="1644419446942" />
-    <state width="1398" height="398" key="GridCell.Tab.0.center" timestamp="1644419446941">
+    <state width="1398" height="269" key="GridCell.Tab.0.bottom/0.25.1440.875@0.25.1440.875" timestamp="1644561394547" />
+    <state width="1398" height="269" key="GridCell.Tab.0.center" timestamp="1644561394546">
       <screen x="0" y="25" width="1440" height="875" />
     </state>
-    <state width="1398" height="398" key="GridCell.Tab.0.center/0.25.1440.875@0.25.1440.875" timestamp="1644419446941" />
-    <state width="1398" height="398" key="GridCell.Tab.0.left" timestamp="1644419446941">
+    <state width="1398" height="269" key="GridCell.Tab.0.center/0.25.1440.875@0.25.1440.875" timestamp="1644561394546" />
+    <state width="1398" height="269" key="GridCell.Tab.0.left" timestamp="1644561394546">
       <screen x="0" y="25" width="1440" height="875" />
     </state>
-    <state width="1398" height="398" key="GridCell.Tab.0.left/0.25.1440.875@0.25.1440.875" timestamp="1644419446941" />
-    <state width="1398" height="398" key="GridCell.Tab.0.right" timestamp="1644419446941">
+    <state width="1398" height="269" key="GridCell.Tab.0.left/0.25.1440.875@0.25.1440.875" timestamp="1644561394546" />
+    <state width="1398" height="269" key="GridCell.Tab.0.right" timestamp="1644561394546">
       <screen x="0" y="25" width="1440" height="875" />
     </state>
-    <state width="1398" height="398" key="GridCell.Tab.0.right/0.25.1440.875@0.25.1440.875" timestamp="1644419446941" />
-    <state width="1398" height="342" key="GridCell.Tab.1.bottom" timestamp="1644419203923">
+    <state width="1398" height="269" key="GridCell.Tab.0.right/0.25.1440.875@0.25.1440.875" timestamp="1644561394546" />
+    <state width="1398" height="342" key="GridCell.Tab.1.bottom" timestamp="1644427343264">
       <screen x="0" y="25" width="1440" height="875" />
     </state>
-    <state width="1398" height="342" key="GridCell.Tab.1.bottom/0.25.1440.875@0.25.1440.875" timestamp="1644419203923" />
-    <state width="1398" height="342" key="GridCell.Tab.1.center" timestamp="1644419203923">
+    <state width="1398" height="342" key="GridCell.Tab.1.bottom/0.25.1440.875@0.25.1440.875" timestamp="1644427343264" />
+    <state width="1398" height="342" key="GridCell.Tab.1.center" timestamp="1644427343263">
       <screen x="0" y="25" width="1440" height="875" />
     </state>
-    <state width="1398" height="342" key="GridCell.Tab.1.center/0.25.1440.875@0.25.1440.875" timestamp="1644419203923" />
-    <state width="1398" height="342" key="GridCell.Tab.1.left" timestamp="1644419203923">
+    <state width="1398" height="342" key="GridCell.Tab.1.center/0.25.1440.875@0.25.1440.875" timestamp="1644427343263" />
+    <state width="1398" height="342" key="GridCell.Tab.1.left" timestamp="1644427343263">
       <screen x="0" y="25" width="1440" height="875" />
     </state>
-    <state width="1398" height="342" key="GridCell.Tab.1.left/0.25.1440.875@0.25.1440.875" timestamp="1644419203923" />
-    <state width="1398" height="342" key="GridCell.Tab.1.right" timestamp="1644419203923">
+    <state width="1398" height="342" key="GridCell.Tab.1.left/0.25.1440.875@0.25.1440.875" timestamp="1644427343263" />
+    <state width="1398" height="342" key="GridCell.Tab.1.right" timestamp="1644427343263">
       <screen x="0" y="25" width="1440" height="875" />
     </state>
-    <state width="1398" height="342" key="GridCell.Tab.1.right/0.25.1440.875@0.25.1440.875" timestamp="1644419203923" />
-    <state x="229" y="98" key="SettingsEditor" timestamp="1644418236172">
+    <state width="1398" height="342" key="GridCell.Tab.1.right/0.25.1440.875@0.25.1440.875" timestamp="1644427343263" />
+    <state x="229" y="98" key="SettingsEditor" timestamp="1644558818927">
       <screen x="0" y="25" width="1440" height="875" />
     </state>
-    <state x="229" y="98" key="SettingsEditor/0.25.1440.875@0.25.1440.875" timestamp="1644418236172" />
+    <state x="229" y="98" key="SettingsEditor/0.25.1440.875@0.25.1440.875" timestamp="1644558818927" />
     <state width="500" height="445" key="SwitcherDM" timestamp="1644217473736">
       <screen x="0" y="25" width="1440" height="875" />
     </state>
@@ -175,10 +156,10 @@
       <screen x="0" y="25" width="1440" height="875" />
     </state>
     <state x="521" y="380" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.25.1440.875@0.25.1440.875" timestamp="1644222587118" />
-    <state x="421" y="217" width="928" height="490" key="find.popup" timestamp="1644419376526">
+    <state x="421" y="217" width="928" height="490" key="find.popup" timestamp="1644562328209">
       <screen x="0" y="25" width="1440" height="875" />
     </state>
-    <state x="421" y="217" width="928" height="490" key="find.popup/0.25.1440.875@0.25.1440.875" timestamp="1644419376526" />
+    <state x="421" y="217" width="928" height="490" key="find.popup/0.25.1440.875@0.25.1440.875" timestamp="1644562328209" />
     <state width="600" height="428" key="javadoc.popup" timestamp="1644417504567">
       <screen x="0" y="25" width="1440" height="875" />
     </state>
@@ -192,9 +173,9 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/sd/upstream.go</url>
-          <line>12</line>
-          <option name="timeStamp" value="19" />
+          <url>file://$PROJECT_DIR$/rpc/server/server.go</url>
+          <line>249</line>
+          <option name="timeStamp" value="23" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

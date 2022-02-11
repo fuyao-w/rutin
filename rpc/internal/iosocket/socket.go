@@ -67,13 +67,15 @@ func (s *IoSocket) dispatch() {
 		case <-s.ExistC:
 			return
 		case req := <-s.requestC:
-			fmt.Println("req.SeqID", req.SeqID)
+			//fmt.Println("req.SeqID", req.SeqID)
 			s.controller.Store(req.SeqID, req)
 			//fmt.Println("\n\n----payload \n\n", string(req.Request.Payload), "\n")
 			desc, _ := metadata.Parse(s.codec, req.Request.Payload)
 			desc.SeqID = req.SeqID
 			req.Request.Payload, _ = s.codec.Encode(desc)
-			s.wc.Write(req.Request.Payload)
+			if _, err := s.wc.Write(req.Request.Payload); err != nil {
+				s.requestCtxEnd(req, nil, err)
+			}
 		}
 	}
 }
@@ -91,9 +93,10 @@ func (s *IoSocket) Call(body *Body) (*Body, error) {
 	default:
 		return nil, ErrChanSize
 	}
+
 	request.Wait()
 
-	return request.Resp, nil
+	return request.Resp, request.Err
 }
 func (i *IoSocket) Close() error {
 	if !atomic.CompareAndSwapInt64(&i.closed, 0, 1) {
@@ -124,7 +127,7 @@ func (i *IoSocket) ClientOnMessage(body []byte, _ io.WriteCloser) {
 		fmt.Println("ClientOnMessage", string(body), err.Error())
 		return
 	}
-	fmt.Println("desc id ", desc.SeqID)
+	//fmt.Println("desc id ", desc.SeqID)
 	//fmt.Println("ClientOnMessage",string(body))
 	value, ok := i.controller.Load(desc.SeqID)
 	if !ok {
@@ -132,15 +135,17 @@ func (i *IoSocket) ClientOnMessage(body []byte, _ io.WriteCloser) {
 	}
 
 	ctx, _ := value.(*RequestContext)
-	fmt.Println("values", *ctx)
+	//fmt.Println("values", *ctx)
 	i.controller.Delete(ctx.SeqID)
-	i.requestCtxEnd(ctx, desc.Response)
+
+	i.requestCtxEnd(ctx, desc.Response, nil)
 
 }
 
-func (i *IoSocket) requestCtxEnd(ctx *RequestContext, body []byte) {
-	fmt.Println("requestCtxEnd", string(body))
+func (i *IoSocket) requestCtxEnd(ctx *RequestContext, body []byte, err error) {
+	//fmt.Println("requestCtxEnd", string(body))
 	ctx.Resp = &Body{Payload: body}
 	ctx.Request = nil
+	ctx.Err = err
 	ctx.Done()
 }

@@ -54,7 +54,10 @@ func (p *pool) releaseSock(host string, sock socket) {
 	delete(p.sockets[host], sock)
 	sock.Close()
 }
-func (p *pool) getSocket(host string) (socket, error) {
+func (p *pool) getSocket(host string) (sock socket, err error) {
+	defer func() {
+		log.Printf("pool|getSocket host :%s %+v", len(p.sockets["127.0.0.1:10000"]))
+	}()
 	var addSock = func(sock socket) {
 		p.sockets[host][sock] = p.clock.Now().Unix()
 	}
@@ -94,7 +97,7 @@ func (p *pool) getSocket(host string) (socket, error) {
 		return sock, nil
 	}
 	p.Unlock()
-	sock, err := p.d.Dial(host)
+	sock, err = p.d.Dial(host)
 	p.Lock()
 	addSock(sock)
 	return sock, err

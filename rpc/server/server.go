@@ -270,7 +270,7 @@ func (r *RpcServer) handleConnection(body []byte, wc io.WriteCloser) {
 		return
 	}
 	desc.Response = bytes
-	fmt.Println("handleConnection",string(bytes))
+	//fmt.Println("handleConnection",string(bytes))
 	bytes, err = r.options.codec.Encode(desc)
 	wc.Write(bytes)
 }

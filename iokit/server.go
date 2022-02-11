@@ -11,8 +11,11 @@ import (
 
 type (
 	options struct {
-		codec        MsgCodec
-		handlerEntry handlerEntry
+		codec             MsgCodec
+		handlerEntry      handlerEntry
+		timerBufferSize   int // size of buffered channel
+		handlerBufferSize int // size of buffered channel
+		writerBufferSize  int // size of buffered channel
 	}
 
 	IoServer struct {

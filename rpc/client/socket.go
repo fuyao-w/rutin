@@ -49,10 +49,10 @@ func (r *RpcSocket) Call(endpoint string, payload []byte) ([]byte, error) {
 
 	body, err := r.socket.Call(&iosocket.Body{Payload: bytes})
 	if err != nil {
-
+		log.Printf("RpcSocket|socket.Call err %s",err)
 		return nil, err
 	}
-	log.Printf("RpcSocket|Call err %s", body.Payload)
+	//log.Printf("RpcSocket|Call err %s", body.Payload)
 	return body.Payload, err
 }
 
