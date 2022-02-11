@@ -12,7 +12,7 @@ func Recover() core.Plugin {
 		defer func() {
 			if p := recover(); p != nil {
 				debug.PrintStack()
-				log.Printf("panic !!! ,%v", p)
+				log.Printf("recover panic !!! ,%v", p)
 			}
 		}()
 		core.Next(ctx)

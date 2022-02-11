@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="ALL" />
+  </component>
+  <component name="BookmarksViewState">
+    <option name="rewriteBookmarkType" value="true" />
+  </component>
   <component name="BranchesTreeState">
     <expand>
       <path>
@@ -20,6 +26,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d4010632-cc9d-49cc-9acd-2efff4a06ec3" name="Default Changelist" comment="">
+<<<<<<< HEAD
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/iokit/channel.go" beforeDir="false" afterPath="$PROJECT_DIR$/iokit/channel.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/iokit/server.go" beforeDir="false" afterPath="$PROJECT_DIR$/iokit/server.go" afterDir="false" />
@@ -28,6 +35,22 @@
       <change beforePath="$PROJECT_DIR$/rpc/client/socket.go" beforeDir="false" afterPath="$PROJECT_DIR$/rpc/client/socket.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rpc/internal/iosocket/socket.go" beforeDir="false" afterPath="$PROJECT_DIR$/rpc/internal/iosocket/socket.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rpc/server/server.go" beforeDir="false" afterPath="$PROJECT_DIR$/rpc/server/server.go" afterDir="false" />
+=======
+      <change afterPath="$PROJECT_DIR$/iokit/seq_packet_parser.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/core.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/core.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/iokit/channel.go" beforeDir="false" afterPath="$PROJECT_DIR$/iokit/channel.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/iokit/codec.go" beforeDir="false" afterPath="$PROJECT_DIR$/iokit/codec.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kit/recovery/recovery.go" beforeDir="false" afterPath="$PROJECT_DIR$/kit/recovery/recovery.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kit/retry/retry.go" beforeDir="false" afterPath="$PROJECT_DIR$/kit/retry/retry.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc/client/client.go" beforeDir="false" afterPath="$PROJECT_DIR$/rpc/client/client.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc/client/socket.go" beforeDir="false" afterPath="$PROJECT_DIR$/rpc/client/socket.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc/internal/iosocket/context.go" beforeDir="false" afterPath="$PROJECT_DIR$/rpc/internal/iosocket/context.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc/internal/iosocket/socket.go" beforeDir="false" afterPath="$PROJECT_DIR$/rpc/internal/iosocket/socket.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc/server/server.go" beforeDir="false" afterPath="$PROJECT_DIR$/rpc/server/server.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sd/upstream.go" beforeDir="false" afterPath="$PROJECT_DIR$/sd/upstream.go" afterDir="false" />
+>>>>>>> 26c6172d4ac15885490292b0e6407dcb5f99833e
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,9 +64,12 @@
       </list>
     </option>
   </component>
-  <component name="GOROOT" path="/usr/local/Cellar/go/1.16.4/libexec" />
+  <component name="GOROOT" url="file:///usr/local/Cellar/go/1.17.6/libexec" />
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectId" id="24PWqHR5rfwXbjc3UeMEsfZOK4I" />
   <component name="ProjectViewState">
@@ -54,12 +80,22 @@
   <component name="PropertiesComponent">
     <property name="DefaultGoTemplateProperty" value="Go File" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="configurable..is.expanded" value="false" />
+    <property name="configurable.GoLibrariesConfigurable.is.expanded" value="true" />
+    <property name="go.format.on.save.advertiser.fired" value="true" />
+    <property name="go.formatter.settings.were.checked" value="true" />
     <property name="go.import.settings.migrated" value="true" />
+    <property name="go.modules.go.list.on.any.changes.was.set" value="true" />
     <property name="go.sdk.automatically.set" value="true" />
+    <property name="go.watchers.conflict.with.on.save.actions.check.performed" value="true" />
     <property name="last.edited.regexp" value="// a" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+<<<<<<< HEAD
     <property name="restartRequiresConfirmation" value="false" />
+=======
+>>>>>>> 26c6172d4ac15885490292b0e6407dcb5f99833e
     <property name="settings.editor.selected.configurable" value="preferences.keymap" />
   </component>
   <component name="RecentsManager">
@@ -76,9 +112,9 @@
       <module name="sd" />
       <working_directory value="$PROJECT_DIR$" />
       <kind value="PACKAGE" />
-      <filePath value="$PROJECT_DIR$/main/main.go" />
       <package value="github.com/fuyao-w/sd/main" />
       <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$/main/main.go" />
       <method v="2" />
     </configuration>
     <recent_temporary>
@@ -101,6 +137,7 @@
         </entry>
       </map>
     </option>
+<<<<<<< HEAD
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
@@ -168,14 +205,22 @@
       <screen x="0" y="25" width="1440" height="875" />
     </state>
     <state x="385" y="214" width="670" height="676" key="search.everywhere.popup/0.25.1440.875@0.25.1440.875" timestamp="1644411962483" />
+=======
+>>>>>>> 26c6172d4ac15885490292b0e6407dcb5f99833e
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+<<<<<<< HEAD
           <url>file://$PROJECT_DIR$/rpc/server/server.go</url>
           <line>249</line>
           <option name="timeStamp" value="23" />
+=======
+          <url>file://$PROJECT_DIR$/sd/upstream.go</url>
+          <line>13</line>
+          <option name="timeStamp" value="19" />
+>>>>>>> 26c6172d4ac15885490292b0e6407dcb5f99833e
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

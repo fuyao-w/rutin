@@ -2,11 +2,11 @@ package iosocket
 
 import (
 	"errors"
-	"fmt"
 	"github.com/fuyao-w/sd/iokit"
 	"github.com/fuyao-w/sd/rpc/codec"
 	"github.com/fuyao-w/sd/rpc/internal/metadata"
 	"io"
+	"log"
 	"net"
 	"sync"
 	"sync/atomic"
@@ -80,10 +80,15 @@ func (s *IoSocket) dispatch() {
 	}
 }
 
-func (s *IoSocket) Call(body *Body) (*Body, error) {
+func (s *IoSocket) Call(handlerDesc metadata.HandlerDesc) (*Body, error) {
+	bytes, err := s.codec.Encode(handlerDesc)
+	if err != nil {
+		log.Printf("RpcSocket|Call|Encode err %s", err)
+		return nil, err
+	}
 	request := &RequestContext{
-		SeqID:   atomic.AddUint64(&s.SeqID, 1),
-		Request: body,
+		SeqID:   handlerDesc.SeqID,
+		Request: &Body{Payload: bytes},
 	}
 	request.Add(1)
 	select {
@@ -122,15 +127,20 @@ func (i *IoSocket) Close() error {
 }
 
 func (i *IoSocket) ClientOnMessage(body []byte, _ io.WriteCloser) {
-	desc, err := metadata.Parse(i.codec, body)
-	if err != nil {
-		fmt.Println("ClientOnMessage", string(body), err.Error())
+	seq := iokit.SeqPacket{}
+	if err := seq.Decode(body); err != nil {
+		log.Printf("IoSocket|ClientOnMessage err %s", err)
 		return
 	}
-	//fmt.Println("desc id ", desc.SeqID)
-	//fmt.Println("ClientOnMessage",string(body))
+	desc, err := metadata.Parse(i.codec, seq.Payload)
+	if err != nil {
+		log.Printf("IoSocket|ClientOnMessage metadata.Parse err:%s ,body :%s", err, string(body))
+		return
+	}
+
 	value, ok := i.controller.Load(desc.SeqID)
 	if !ok {
+		log.Printf("IoSocket|ClientOnMessage|Load not ok :%+v", desc)
 		return
 	}
 
@@ -143,7 +153,6 @@ func (i *IoSocket) ClientOnMessage(body []byte, _ io.WriteCloser) {
 }
 
 func (i *IoSocket) requestCtxEnd(ctx *RequestContext, body []byte, err error) {
-	//fmt.Println("requestCtxEnd", string(body))
 	ctx.Resp = &Body{Payload: body}
 	ctx.Request = nil
 	ctx.Err = err
