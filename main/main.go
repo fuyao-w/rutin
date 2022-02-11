@@ -2,10 +2,10 @@ package main
 
 import (
 	"fmt"
-	"github.com/fuyao-w/sd/rpc/codec"
-	"github.com/fuyao-w/sd/rpc/server"
-	"github.com/fuyao-w/sd/sd"
-	"github.com/fuyao-w/sd/worker"
+	"github.com/fuyao-w/rutin/rpc/codec"
+	"github.com/fuyao-w/rutin/rpc/server"
+	"github.com/fuyao-w/rutin/sd"
+	"github.com/fuyao-w/rutin/worker"
 	"time"
 )
 

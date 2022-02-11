@@ -2,9 +2,9 @@ package iosocket
 
 import (
 	"errors"
-	"github.com/fuyao-w/sd/iokit"
-	"github.com/fuyao-w/sd/rpc/codec"
-	"github.com/fuyao-w/sd/rpc/internal/metadata"
+	"github.com/fuyao-w/rutin/iokit"
+	"github.com/fuyao-w/rutin/rpc/codec"
+	"github.com/fuyao-w/rutin/rpc/internal/metadata"
 	"io"
 	"log"
 	"net"

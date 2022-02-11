@@ -2,7 +2,7 @@ package sd
 
 import (
 	"fmt"
-	"github.com/fuyao-w/sd/core"
+	"github.com/fuyao-w/rutin/core"
 	redigo "github.com/garyburd/redigo/redis"
 )
 

@@ -2,9 +2,9 @@ package client
 
 import (
 	"errors"
-	"github.com/fuyao-w/sd/rpc/codec"
-	"github.com/fuyao-w/sd/rpc/internal/iosocket"
-	"github.com/fuyao-w/sd/rpc/internal/metadata"
+	"github.com/fuyao-w/rutin/rpc/codec"
+	"github.com/fuyao-w/rutin/rpc/internal/iosocket"
+	"github.com/fuyao-w/rutin/rpc/internal/metadata"
 	"log"
 	"net"
 	"strings"

@@ -3,7 +3,7 @@ package sd
 import (
 	"context"
 	"errors"
-	"github.com/fuyao-w/sd/core"
+	"github.com/fuyao-w/rutin/core"
 	"log"
 )
 

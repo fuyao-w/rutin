@@ -2,10 +2,10 @@ package client
 
 import (
 	"context"
-	"github.com/fuyao-w/sd/core"
-	"github.com/fuyao-w/sd/kit/recovery"
-	"github.com/fuyao-w/sd/kit/retry"
-	"github.com/fuyao-w/sd/sd"
+	"github.com/fuyao-w/rutin/core"
+	"github.com/fuyao-w/rutin/kit/recovery"
+	"github.com/fuyao-w/rutin/kit/retry"
+	"github.com/fuyao-w/rutin/sd"
 )
 
 type NetClient interface {

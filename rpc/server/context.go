@@ -2,8 +2,8 @@ package server
 
 import (
 	"context"
-	"github.com/fuyao-w/sd/core"
-	"github.com/fuyao-w/sd/rpc/codec"
+	"github.com/fuyao-w/rutin/core"
+	"github.com/fuyao-w/rutin/rpc/codec"
 )
 
 type Plugin func(c *Context)

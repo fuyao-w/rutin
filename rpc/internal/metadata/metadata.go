@@ -1,6 +1,6 @@
 package metadata
 
-import "github.com/fuyao-w/sd/rpc/codec"
+import "github.com/fuyao-w/rutin/rpc/codec"
 
 type HandlerDesc struct {
 	ServiceName string `json:"service_name"`

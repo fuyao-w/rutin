@@ -3,7 +3,7 @@ package retry
 import (
 	"context"
 	"fmt"
-	"github.com/fuyao-w/sd/core"
+	"github.com/fuyao-w/rutin/core"
 	"log"
 	"strings"
 )

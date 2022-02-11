@@ -1,7 +1,7 @@
 package client
 
 import (
-	"github.com/fuyao-w/sd/rpc/codec"
+	"github.com/fuyao-w/rutin/rpc/codec"
 	"time"
 )
 

@@ -2,7 +2,7 @@ package recovery
 
 import (
 	"context"
-	"github.com/fuyao-w/sd/core"
+	"github.com/fuyao-w/rutin/core"
 	"log"
 	"runtime/debug"
 )

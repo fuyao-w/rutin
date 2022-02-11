@@ -2,7 +2,7 @@ package client
 
 import (
 	"context"
-	"github.com/fuyao-w/sd/core"
+	"github.com/fuyao-w/rutin/core"
 )
 
 type rpcFactory struct {

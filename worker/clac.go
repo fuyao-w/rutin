@@ -2,7 +2,7 @@ package worker
 
 import (
 	"context"
-	"github.com/fuyao-w/sd/rpc/client"
+	"github.com/fuyao-w/rutin/rpc/client"
 )
 
 type ProxyHandle struct {
