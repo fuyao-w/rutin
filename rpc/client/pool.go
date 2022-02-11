@@ -55,9 +55,6 @@ func (p *pool) releaseSock(host string, sock socket) {
 	sock.Close()
 }
 func (p *pool) getSocket(host string) (sock socket, err error) {
-	defer func() {
-		log.Printf("pool|getSocket host :%s %+v", len(p.sockets["127.0.0.1:10000"]))
-	}()
 	var addSock = func(sock socket) {
 		p.sockets[host][sock] = p.clock.Now().Unix()
 	}

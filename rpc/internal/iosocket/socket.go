@@ -67,28 +67,29 @@ func (s *IoSocket) dispatch() {
 		case <-s.ExistC:
 			return
 		case req := <-s.requestC:
-			//fmt.Println("req.SeqID", req.SeqID)
+
 			s.controller.Store(req.SeqID, req)
-			//fmt.Println("\n\n----payload \n\n", string(req.Request.Payload), "\n")
-			desc, _ := metadata.Parse(s.codec, req.Request.Payload)
-			desc.SeqID = req.SeqID
-			req.Request.Payload, _ = s.codec.Encode(desc)
-			if _, err := s.wc.Write(req.Request.Payload); err != nil {
+
+			body, _ := (&iokit.SeqPacket{
+				SeqID: req.SeqID,
+				Payload: func() []byte {
+					body, _ := metadata.Marshal(req.Request)
+					return body
+				}(),
+			}).Encode()
+
+			//fmt.Println("dispatch", string(body))
+			if _, err := s.wc.Write(body); err != nil {
 				s.requestCtxEnd(req, nil, err)
 			}
 		}
 	}
 }
 
-func (s *IoSocket) Call(handlerDesc metadata.HandlerDesc) (*Body, error) {
-	bytes, err := s.codec.Encode(handlerDesc)
-	if err != nil {
-		log.Printf("RpcSocket|Call|Encode err %s", err)
-		return nil, err
-	}
+func (s *IoSocket) Call(handlerDesc metadata.HandlerDesc, seqID uint64) (*Body, error) {
 	request := &RequestContext{
-		SeqID:   handlerDesc.SeqID,
-		Request: &Body{Payload: bytes},
+		SeqID:   seqID,
+		Request: &handlerDesc,
 	}
 	request.Add(1)
 	select {
@@ -132,13 +133,13 @@ func (i *IoSocket) ClientOnMessage(body []byte, _ io.WriteCloser) {
 		log.Printf("IoSocket|ClientOnMessage err %s", err)
 		return
 	}
-	desc, err := metadata.Parse(i.codec, seq.Payload)
+	desc, err := metadata.Unmarshal(seq.Payload)
 	if err != nil {
-		log.Printf("IoSocket|ClientOnMessage metadata.Parse err:%s ,body :%s", err, string(body))
+		log.Printf("IoSocket|ClientOnMessage metadata.Unmarshal err:%s ,body :%s", err, string(body))
 		return
 	}
 
-	value, ok := i.controller.Load(desc.SeqID)
+	value, ok := i.controller.Load(seq.SeqID)
 	if !ok {
 		log.Printf("IoSocket|ClientOnMessage|Load not ok :%+v", desc)
 		return

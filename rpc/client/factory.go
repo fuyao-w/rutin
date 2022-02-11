@@ -11,9 +11,6 @@ type rpcFactory struct {
 }
 
 func (r *rpcFactory) Factory(host string) (core.Plugin, error) {
-	var (
-		codec = r.options.Codec
-	)
 	socket, err := r.connPool.getSocket(host)
 	if err != nil {
 		return nil, err
@@ -29,10 +26,8 @@ func (r *rpcFactory) Factory(host string) (core.Plugin, error) {
 			}
 		}()
 		rpcCtx := ctx.Value(rpcContextKey).(*RpcContext)
-		if body, err = codec.Encode(rpcCtx.Request); err != nil {
-			return
-		}
-		if body, err = socket.Call(rpcCtx.EndPoint, body); err != nil {
+
+		if body, err = socket.Call(rpcCtx.EndPoint, rpcCtx.Request); err != nil {
 			return
 		}
 		err = r.options.Codec.Decode(body, rpcCtx.Response)
