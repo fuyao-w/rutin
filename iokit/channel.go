@@ -74,7 +74,7 @@ func (c *Channel) Write(p []byte) (n int, err error) {
 			err = ErrServerClosed
 		}
 	}()
-
+	//channel 层只负责基本的封包，如果有包顺序的要求，则需要在上层封装协议
 	bytes, err := c.options.codec.Encode(p)
 	if err != nil {
 		return 0, err
@@ -156,7 +156,6 @@ func (c *Channel) readLoop() {
 				}
 				return
 			}
-
 			c.handleC <- &MsgHandler{
 				Msg:     body,
 				Handler: c.options.handlerEntry,

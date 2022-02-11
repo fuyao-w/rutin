@@ -1,11 +1,14 @@
 package iosocket
 
-import "sync"
+import (
+	"github.com/fuyao-w/rutin/rpc/internal/metadata"
+	"sync"
+)
 
 type RequestContextKey struct{}
 type RequestContext struct {
 	SeqID   uint64
-	Request *Body
+	Request *metadata.HandlerDesc
 	Resp    *Body
 	Closed  bool
 	Err     error

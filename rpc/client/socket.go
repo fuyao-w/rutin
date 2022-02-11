@@ -13,7 +13,7 @@ import (
 )
 
 type socket interface {
-	Call(endpoint /*rpc 的调用方法*/ string, body []byte) ([]byte, error)
+	Call(endpoint /*rpc 的调用方法*/ string, req interface{}) ([]byte, error)
 	Close() error
 }
 
@@ -35,18 +35,23 @@ func initRpcSocket(conn net.Conn, options Options) *RpcSocket {
 	return s
 }
 
-func (r *RpcSocket) Call(endpoint string, payload []byte) ([]byte, error) {
+func (r *RpcSocket) Call(endpoint string, req interface{}) ([]byte, error) {
 	arr := strings.Split(endpoint, ".")
 	if len(arr) != 2 {
 		return nil, errors.New("endpoint format err .right format : serviceName.methName")
 	}
-	metaDate := metadata.HandlerDesc{
+
+	payload, err := r.codec.Encode(req)
+	if err != nil {
+		log.Printf("RpcSocket|Call|Encode err %s", err)
+		return nil, err
+	}
+	body, err := r.socket.Call(metadata.HandlerDesc{
 		ServiceName: arr[0],
 		MethName:    arr[1],
 		Param:       payload,
-		SeqID:       atomic.AddUint64(&r.socket.SeqID, 1),
-	}
-	body, err := r.socket.Call(metaDate)
+	}, atomic.AddUint64(&r.socket.SeqID, 1))
+
 	if err != nil {
 		log.Printf("RpcSocket|Call err %s", err)
 		return nil, err

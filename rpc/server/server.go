@@ -249,15 +249,15 @@ func (r *RpcServer) handleConnection(body []byte, wc io.WriteCloser) {
 		desc = metadata.HandlerDesc{}
 		pck  iokit.SeqPacket
 	)
-
+	//解析 协议包
 	if err := pck.Decode(body); err != nil {
 		fmt.Println("Decode err", err)
 		return
 	}
-
-	desc, err := metadata.Parse(r.options.codec, pck.Payload)
+	//解析 rpc 请求元数据
+	desc, err := metadata.Unmarshal(pck.Payload)
 	if err != nil {
-		log.Printf("handleConnection|Parse err %s", err)
+		log.Printf("handleConnection|Unmarshal err %s ,paylod :%s", err,string(body))
 		return
 	}
 	handler, ok := r.serviceMap[desc.ServiceName]
@@ -267,21 +267,22 @@ func (r *RpcServer) handleConnection(body []byte, wc io.WriteCloser) {
 	}
 	reply, err := r.call(*handler, desc)
 	if err != nil {
-		log.Printf("HandleConnection do err :%s", err)
+		log.Printf("HandleConnection do err :%s ,%s", err,string(pck.Payload))
 		return
 	}
-
+	//编码返回消息
 	bytes, err := r.options.codec.Encode(reply.Interface())
 	if err != nil {
 		return
 	}
 	//iokit.SeqPacket{}
 	desc.Response = bytes
-
-	pck.Payload, err = r.options.codec.Encode(desc)
+	//编码 rpc 元数据
+	pck.Payload, err = metadata.Marshal(&desc)
 	if err != nil {
 		return
 	}
+	//编码协议包
 	bytes, err = pck.Encode()
 	if err != nil {
 		return
