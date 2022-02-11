@@ -23,7 +23,7 @@ func init() {
 	//	Port: 10010,
 	//})
 }
-func main1() {
+func main() {
 	//client := worker.InitProxyHandle()
 	go func() {
 		handler := worker.InitHandle()
