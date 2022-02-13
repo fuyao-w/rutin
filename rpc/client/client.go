@@ -4,7 +4,6 @@ import (
 	"context"
 	"github.com/fuyao-w/rutin/core"
 	"github.com/fuyao-w/rutin/kit/recovery"
-	"github.com/fuyao-w/rutin/kit/retry"
 	"github.com/fuyao-w/rutin/sd"
 )
 
@@ -31,7 +30,7 @@ func (g *generalClient) Invoke(ctx context.Context, methName string, in, out int
 func newGeneralClient(factory sd.PluginFactory, serviceName string, options Options) *generalClient {
 	plugins := []core.Plugin{
 		recovery.Recover(),
-		retry.Retry(options.RetryTimes),
+		//retry.Retry(options.RetryTimes),
 		sd.NewUpStream(factory, serviceName),
 	}
 

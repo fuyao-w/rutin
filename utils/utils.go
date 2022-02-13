@@ -3,7 +3,26 @@ package utils
 import (
 	"encoding/json"
 	netAddr "net"
+	"runtime"
 )
+
+func PrintLine() (funcName, file string, line int) {
+	var (
+		ok      bool
+		funcPtr uintptr
+	)
+	funcPtr, file, line, ok = runtime.Caller(1)
+	if !ok {
+		//fmt.Println("func name: " + )
+		//fmt.Printf("file: %s, line: %d\n", file, line)
+		return
+	}
+	if pc := runtime.FuncForPC(funcPtr); pc != nil {
+		funcName = pc.Name()
+	}
+
+	return
+}
 
 func GetJsonBytes(obj interface{}) []byte {
 	bytes, _ := json.Marshal(obj)

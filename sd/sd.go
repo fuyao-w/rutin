@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/fuyao-w/rutin/core"
 	redigo "github.com/garyburd/redigo/redis"
+	"log"
 )
 
 type ServiceDiscover interface {
@@ -21,7 +22,8 @@ const (
 )
 
 type RedisRegisterProtocol struct {
-	rds redigo.Conn
+	rds  redigo.Conn
+	addr string
 }
 
 func NewRedisRegisterProtocol(addr string) (r *RedisRegisterProtocol, err error) {
@@ -44,7 +46,8 @@ func NewRedisRegisterProtocol(addr string) (r *RedisRegisterProtocol, err error)
 
 	conn, err := redigo.Dial("tcp", addr)
 	return &RedisRegisterProtocol{
-		rds: conn,
+		rds:  conn,
+		addr: addr,
 	}, err
 }
 
@@ -70,9 +73,18 @@ func (r *RedisRegisterProtocol) Unregister(name, addr string) error {
 }
 
 func (r *RedisRegisterProtocol) GetAddrSlice(name string) (arrs []string) {
-	reply, err := redigo.Strings(r.rds.Do("SMembers", getKey(key, name)))
+	return []string{"127.0.0.1:10000"}
+	conn, err := redigo.Dial("tcp", r.addr)
 	if err != nil {
-		fmt.Println("redis register err ", err)
+		log.Printf("GetAddrSlice|Dial %s", err)
+		return nil
+	}
+	defer func() {
+		conn.Close()
+	}()
+	reply, err := redigo.Strings(conn.Do("SMEMBERS", getKey(key, name)))
+	if err != nil {
+		log.Printf("redis register err: %s", err)
 	}
 	return reply
 }

@@ -3,10 +3,10 @@ package iokit
 import (
 	"context"
 	"io"
+	"log"
 	"net"
 	"sync"
 	"sync/atomic"
-	"time"
 )
 
 type (
@@ -61,16 +61,18 @@ func NewIoServer(opts ...Option) *IoServer {
 	}
 }
 func (s *IoServer) Start(l net.Listener) error {
+	var i = 1
 	for {
 		conn, err := l.Accept()
 		if err != nil {
 			if err, ok := err.(net.Error); ok && err.Temporary() {
-				time.Sleep(time.Second)
+				log.Printf("IoServer|Accept|err %s ,idx :%d", err, i)
+				//time.Sleep(time.Second)
 				continue
 			}
 			return err
 		}
-
+		i++
 		channel := NewServerChannel(conn, atomic.AddUint64(&s.connID, 1), channelOptions{options: s.options})
 		go channel.Start()
 

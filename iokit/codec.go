@@ -1,4 +1,5 @@
 package iokit
+
 /*
 	codec.go 通过两个层次对网络包进行编、解码
 	第一层：基本的拆包、封包，通过 MsgCodec 来实现
@@ -14,12 +15,14 @@ package iokit
 	上面实现可以减少调用处代码复杂度，但是依然需要硬编码将两种编码方式组合起来，导致不容易理解。
 	这里以容易学习理解为主，所以采用两层编解码的方式
 
- */
-import "io"
+*/
+import (
+	"bufio"
+)
 
 type MsgCodec interface {
 	Encode(content []byte) ([]byte, error)
-	Decode(conn io.ReadCloser) ([]byte, error)
+	Decode(conn *bufio.Reader) ([]byte, error)
 }
 
 type Packet interface {

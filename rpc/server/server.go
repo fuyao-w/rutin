@@ -133,7 +133,6 @@ func (r *RpcServer) Use(plugin ...Plugin) Server {
 func (r *RpcServer) Start() error {
 	//1. 服务发现注册
 	//2. 调用 iosocket.Server.Start()
-
 	l, err := net.Listen("tcp4", r.options.Address)
 	if err != nil {
 		//logging.GenLogf("start rpc server on %s failed, %v", h.opts.Address, e)
@@ -147,6 +146,7 @@ func (r *RpcServer) Start() error {
 			return err
 		}
 	}
+
 	if err = r.server.Server.Start(l); err != nil {
 		return err
 	}
@@ -257,7 +257,7 @@ func (r *RpcServer) handleConnection(body []byte, wc io.WriteCloser) {
 	//解析 rpc 请求元数据
 	desc, err := metadata.Unmarshal(pck.Payload)
 	if err != nil {
-		log.Printf("handleConnection|Unmarshal err %s ,paylod :%s", err,string(body))
+		log.Printf("handleConnection|Unmarshal err %s ,paylod :%s", err, string(body))
 		return
 	}
 	handler, ok := r.serviceMap[desc.ServiceName]
@@ -267,7 +267,7 @@ func (r *RpcServer) handleConnection(body []byte, wc io.WriteCloser) {
 	}
 	reply, err := r.call(*handler, desc)
 	if err != nil {
-		log.Printf("HandleConnection do err :%s ,%s", err,string(pck.Payload))
+		log.Printf("HandleConnection do err :%s ,%s", err, string(pck.Payload))
 		return
 	}
 	//编码返回消息

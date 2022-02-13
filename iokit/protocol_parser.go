@@ -11,17 +11,16 @@ import (
 
 type ProtocolParser struct{}
 
-func (p *ProtocolParser) Decode(conn io.ReadCloser) ([]byte, error) {
+func (p *ProtocolParser) Decode(r *bufio.Reader) ([]byte, error) {
 	var (
-		r        = bufio.NewReader(conn)
 		fieldMap = map[string]string{}
 		key      string
 	)
-
 	line, err := r.ReadString('\n')
 	if err != nil {
 		return nil, err
 	}
+
 	line = strings.TrimRight(line, "\n")
 	for i, field := range strings.Split(line, " ") {
 		if i&1 == 1 {
@@ -34,13 +33,13 @@ func (p *ProtocolParser) Decode(conn io.ReadCloser) ([]byte, error) {
 	if !ok {
 		return nil, errors.New("protocol not have field length")
 	}
-
 	length, err := strconv.Atoi(val)
 	if err != nil {
 		return nil, fmt.Errorf("parse field length err: %s", err)
 	}
 	buf := make([]byte, length)
-	n, err := r.Read(buf)
+	//这块读取的时候可能包还没发过来呢，所以用 io.ReadFull
+	n, err := io.ReadFull(r, buf)
 	if err != nil {
 		return nil, fmt.Errorf("read content err: %s", err)
 	}
@@ -60,7 +59,6 @@ header 内容：版本 content 长度（字节数）
 version 1.1 length 10093
 */
 func (p *ProtocolParser) Encode(content []byte) ([]byte, error) {
-	//fmt.Println("----ENCODe----",string(content))
 	var builder strings.Builder
 	content = append(content, '\n')
 	builder.WriteString(genHeader(len(content)))

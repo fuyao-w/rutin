@@ -55,7 +55,6 @@ func NewIoSocket(conn net.Conn, codec codec.RequestCodec) IoSocket {
 //}
 
 func (s *IoSocket) StartWorker() {
-
 	client := iokit.NewClientChannel(s.conn, iokit.NewOnMessage(s.ClientOnMessage), iokit.NewCodec(&iokit.ProtocolParser{}))
 	client.Start()
 	s.wc = client
@@ -67,9 +66,8 @@ func (s *IoSocket) dispatch() {
 		case <-s.ExistC:
 			return
 		case req := <-s.requestC:
-
+			//log.Printf("dispatch id :%d", req.SeqID)
 			s.controller.Store(req.SeqID, req)
-
 			body, _ := (&iokit.SeqPacket{
 				SeqID: req.SeqID,
 				Payload: func() []byte {
@@ -78,7 +76,13 @@ func (s *IoSocket) dispatch() {
 				}(),
 			}).Encode()
 
-			//fmt.Println("dispatch", string(body))
+			//if len(body) > 156 {
+			//	fmt.Println("dispatch", len(body), string(body))
+			//	parser := iokit.ProtocolParser{}
+			//	d,_ := parser.Encode(body)
+			//	fmt.Println(string(d))
+			//}
+
 			if _, err := s.wc.Write(body); err != nil {
 				s.requestCtxEnd(req, nil, err)
 			}
@@ -87,17 +91,22 @@ func (s *IoSocket) dispatch() {
 }
 
 func (s *IoSocket) Call(handlerDesc metadata.HandlerDesc, seqID uint64) (*Body, error) {
+	if seqID%1000 == 0 {
+		log.Printf("call seqID :%d", seqID)
+	}
+
 	request := &RequestContext{
 		SeqID:   seqID,
 		Request: &handlerDesc,
 	}
 	request.Add(1)
+	//fmt.Println("len" ,len(s.requestC))
 	select {
 	case <-s.exitC:
 		return nil, ErrExited
 	case s.requestC <- request:
-	default:
-		return nil, ErrChanSize
+		//default:
+		//	return nil, ErrChanSize
 	}
 
 	request.Wait()
