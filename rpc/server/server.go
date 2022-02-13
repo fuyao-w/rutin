@@ -262,7 +262,7 @@ func (r *RpcServer) handleConnection(body []byte, wc io.WriteCloser) {
 	}
 	handler, ok := r.serviceMap[desc.ServiceName]
 	if !ok {
-		log.Printf("handleConnection|service not found :%s", desc.ServiceName)
+		log.Printf("handleConnection|service not found ,serviceName :%s ,methName :%s ,%s", desc.ServiceName, desc.MethName, string(pck.Payload))
 		return
 	}
 	reply, err := r.call(*handler, desc)
