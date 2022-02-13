@@ -50,7 +50,7 @@ func (r *RpcSocket) Call(endpoint string, req interface{}) ([]byte, error) {
 		ServiceName: arr[0],
 		MethName:    arr[1],
 		Param:       payload,
-	}, atomic.AddUint64(&r.socket.SeqID, 1))
+	}, atomic.AddUint64(&r.socket.SeqID, 1), iosocket.Timeout(time.Second))
 
 	if err != nil {
 		log.Printf("RpcSocket|Call err %s", err)

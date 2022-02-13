@@ -10,11 +10,13 @@ import (
 	"net"
 	"sync"
 	"sync/atomic"
+	"time"
 )
 
 var (
-	ErrExited   = errors.New("socket exit")
-	ErrChanSize = errors.New("socket chan blocked")
+	ErrExited         = errors.New("socket exit")
+	ErrChanSize       = errors.New("socket chan blocked")
+	ErrRequestTimeOut = errors.New("request time out")
 )
 
 type IoSocket struct {
@@ -90,7 +92,14 @@ func (s *IoSocket) dispatch() {
 	}
 }
 
-func (s *IoSocket) Call(handlerDesc metadata.HandlerDesc, seqID uint64) (*Body, error) {
+func (s *IoSocket) Call(handlerDesc metadata.HandlerDesc, seqID uint64, opts ...Option) (*Body, error) {
+	var options = Options{
+		RequestTimeout: time.Second,
+	}
+	for _, opt := range opts {
+		opt(&options)
+	}
+
 	if seqID%1000 == 0 {
 		log.Printf("call seqID :%d", seqID)
 	}
@@ -100,7 +109,9 @@ func (s *IoSocket) Call(handlerDesc metadata.HandlerDesc, seqID uint64) (*Body, 
 		Request: &handlerDesc,
 	}
 	request.Add(1)
-	//fmt.Println("len" ,len(s.requestC))
+	request.Timer = time.AfterFunc(options.RequestTimeout, func() {
+		s.requestCtxEnd(request, nil, ErrRequestTimeOut)
+	})
 	select {
 	case <-s.exitC:
 		return nil, ErrExited
@@ -163,8 +174,14 @@ func (i *IoSocket) ClientOnMessage(body []byte, _ io.WriteCloser) {
 }
 
 func (i *IoSocket) requestCtxEnd(ctx *RequestContext, body []byte, err error) {
+	//这块防止 requestCtxEnd 重复调用导致 WaitGroup.Done() panic
+	if !atomic.CompareAndSwapInt64(&ctx.End, 0, 1) {
+		// context already end
+		return
+	}
 	ctx.Resp = &Body{Payload: body}
 	ctx.Request = nil
 	ctx.Err = err
+	ctx.Timer.Stop()
 	ctx.Done()
 }
