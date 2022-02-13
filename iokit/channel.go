@@ -73,6 +73,7 @@ func (c *Channel) Write(p []byte) (n int, err error) {
 		if ppp := recover(); ppp != nil {
 			err = ErrServerClosed
 		}
+
 	}()
 	//channel 层只负责基本的封包，如果有包顺序的要求，则需要在上层封装协议
 	bytes, err := c.options.codec.Encode(p)
@@ -84,9 +85,9 @@ func (c *Channel) Write(p []byte) (n int, err error) {
 	case c.writeC <- bytes:
 		err = nil
 		//fmt.Println("writeloop" ,string(bytes))
-	default:
-
-		err = ErrWouldBlock
+		//default:
+		//
+		//	err = ErrWouldBlock
 	}
 	return len(p), err
 }
@@ -131,7 +132,6 @@ func NewClientChannel(conn net.Conn, opts ...Option) *ClientChannel {
 
 func (c *Channel) deferProc(name string, wg *sync.WaitGroup) {
 	wg.Done()
-
 	if p := recover(); p != nil {
 		//c.Close()
 		log.Printf("%s panic :%s", name, p)
@@ -141,20 +141,24 @@ func (c *Channel) deferProc(name string, wg *sync.WaitGroup) {
 }
 func (c *Channel) readLoop() {
 	defer c.deferProc("readLoop", &c.wg)
+
 	for {
 		select {
 		case <-c.cancelCtx.Done():
 			log.Print("readloop|cancelCtx ")
 			return
 		default:
-			body, err := c.options.codec.Decode(c.conn)
+			body, err := c.options.codec.Decode(c.reader)
 			if err != nil {
-				//log.Printf("readLoop|Decode err %s", err)
 				if err, ok := err.(net.Error); ok && err.Temporary() {
 					time.Sleep(time.Second)
 					continue
 				}
+				log.Println("readLoop|decode err ", err)
 				return
+			}
+			if len(body) == 0 {
+				continue
 			}
 			c.handleC <- &MsgHandler{
 				Msg:     body,
@@ -165,16 +169,23 @@ func (c *Channel) readLoop() {
 }
 func (c *Channel) writeLoop() {
 	defer c.deferProc("writeLoop", &c.wg)
-
+	var stashSize = 10
 	for {
 		select {
 		case <-c.cancelCtx.Done():
 			return
 		case info := <-c.writeC:
-			c.writer.Write(info)
+			buf := append([]byte(nil), info...)
+			if len(c.writeC) >= stashSize {
+				for i := 0; i < stashSize; i++ {
+					buf = append(buf, <-c.writeC...)
+				}
+			}
+
+			c.writer.Write(buf)
 			c.writer.Flush()
-		//default: 测试用
-		//	log.Println("writeloop blocked")
+			//default: 测试用
+			//	log.Println("writeloop blocked")
 		}
 	}
 }
@@ -195,6 +206,7 @@ func (c *Channel) Start() {
 	go c.readLoop()
 	go c.handleLoop()
 	go c.writeLoop()
+	//c.wg.Wait()
 }
 
 func (c *Channel) Init() *Channel {

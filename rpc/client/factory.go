@@ -3,6 +3,7 @@ package client
 import (
 	"context"
 	"github.com/fuyao-w/rutin/core"
+	"log"
 )
 
 type rpcFactory struct {
@@ -13,6 +14,7 @@ type rpcFactory struct {
 func (r *rpcFactory) Factory(host string) (core.Plugin, error) {
 	socket, err := r.connPool.getSocket(host)
 	if err != nil {
+		log.Printf("rpcFactory|Factory|getSocket err %s,host: %s", err, host)
 		return nil, err
 	}
 	return core.Function(func(ctx context.Context, core core.Drive) {

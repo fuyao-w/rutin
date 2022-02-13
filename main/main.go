@@ -6,6 +6,8 @@ import (
 	"github.com/fuyao-w/rutin/rpc/server"
 	"github.com/fuyao-w/rutin/sd"
 	"github.com/fuyao-w/rutin/worker"
+	"log"
+	"sync"
 	"time"
 )
 
@@ -35,19 +37,36 @@ func main() {
 		fmt.Println(server.GetPaths())
 		server.Start()
 	}()
-	time.Sleep(time.Millisecond * 40)
+	time.Sleep(time.Millisecond * 100)
 	handle := worker.InitProxyHandle()
-	var resp worker.ClacResp
-	for i := 0; i < 100; i++ {
+	var (
+		wg  sync.WaitGroup
+		sum = 2200
+	)
+	now := time.Now().UnixNano()
+	wg.Add(sum)
+	for i := 0; i < sum; i++ {
+		go func(i int) {
+			defer func() {
+				wg.Done()
+			}()
+			var resp worker.ClacResp
+			//log.Printf("%d resp :%+v\n", i, resp)
+			if err := handle.Calc(worker.ClacReq{
+				A: i,
+				B: i >> 1,
+			}, &resp); err != nil {
+				log.Printf("calc err %s", err)
+			} else {
+				//fmt.Println("resp", resp.Result)
+			}
 
-		fmt.Println(handle.Calc(worker.ClacReq{
-			A: 1,
-			B: 2,
-		}, &resp))
 
-		fmt.Printf("%d resp :%+v\n", i, resp)
+		}(i)
+
 	}
-
+	wg.Wait()
+	log.Printf("execute time :%f\n\n\n", time.Duration(time.Now().UnixNano()-now).Seconds())
 	//go func() {
 	//
 	//}()

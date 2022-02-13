@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	DefaultPoolSize = 100
+	DefaultPoolSize = 10
 	DefaultPoolTTL  = time.Second * 60
 )
 
@@ -23,7 +23,7 @@ type defaultDialer struct {
 func (d *defaultDialer) Dial(host string) (socket, error) {
 	conn, err := net.DialTimeout("tcp", host, d.options.Timeout)
 	if err != nil {
-		log.Printf("defaultDialer|DialTimeout err %s,host :%s", err, host)
+		log.Printf("defaultDialer|DialTimeout err %s,host :%s ,%v", err, host, d.options.Timeout.Milliseconds())
 		return nil, err
 	}
 	return initRpcSocket(conn, d.options), err
@@ -58,6 +58,9 @@ func (p *pool) getSocket(host string) (sock socket, err error) {
 	var addSock = func(sock socket) {
 		p.sockets[host][sock] = p.clock.Now().Unix()
 	}
+	defer func() {
+		//log.Printf("getsocket size :%d", len(p.sockets[host]))
+	}()
 	p.Lock()
 	defer p.Unlock()
 	now := p.clock.Now().Unix()
@@ -73,15 +76,16 @@ func (p *pool) getSocket(host string) (sock socket, err error) {
 		p.cleanup = now
 	}
 	if len(p.sockets[host]) < p.size {
-		p.Unlock()
+		//p.Unlock()
 		sock, err := p.d.Dial(host)
-		p.Lock()
+		//p.Lock()
 		if err != nil {
 			return nil, err
 		}
 		if p.sockets[host] == nil {
 			p.sockets[host] = make(map[socket]int64, 1)
 		}
+
 		addSock(sock)
 		return sock, err
 	}
@@ -90,12 +94,13 @@ func (p *pool) getSocket(host string) (sock socket, err error) {
 		if now-lastActivity > p.ttl {
 			continue
 		}
-		addSock(sock)
+
 		return sock, nil
 	}
-	p.Unlock()
+	//log.Println("add sock",len(p.sockets[host]) , p.size)
+	//p.Unlock()
 	sock, err = p.d.Dial(host)
-	p.Lock()
+	//p.Lock()
 	addSock(sock)
 	return sock, err
 }
@@ -111,7 +116,7 @@ func newPool(size int, ttl time.Duration, d dialer) pool {
 		}(),
 		ttl: func() int64 {
 			if ttl.Seconds() > 0 {
-				return int64(ttl)
+				return int64(ttl.Seconds())
 			}
 			panic("pool ttl must gte 0")
 		}(),

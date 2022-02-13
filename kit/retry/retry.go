@@ -35,7 +35,7 @@ func Retry(max int) core.Plugin {
 
 		idx := d.Index()
 		var retryError RetryError
-		for i := 0; i < max; i++ {
+		for i := -1; i < max; i++ {
 			d.Reset(idx)
 			d.Next(ctx)
 			err := d.Err()

@@ -22,7 +22,7 @@ func newOptions(opts ...Option) (options Options) {
 		//Codec:      nil,
 		PoolSize:   DefaultPoolSize,
 		TTL:        DefaultPoolTTL,
-		RetryTimes: 1,
+		RetryTimes: 0,
 		Timeout:    3 * time.Second,
 		Codec:      &codec.JsonCodec{},
 	}
