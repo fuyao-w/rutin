@@ -14,9 +14,9 @@ import (
 )
 
 var (
-	ErrExited         = errors.New("socket exit")
-	ErrChanSize       = errors.New("socket chan blocked")
-	ErrRequestTimeOut = errors.New("request time out")
+	InternalErrExited   = errors.New("iosocket: socket exit")
+	InternalErrChanSize = errors.New("iosocket: socket chan blocked")
+	ErrRequestTimeOut   = errors.New("iosocket: request time out")
 )
 
 type IoSocket struct {
@@ -92,6 +92,9 @@ func (s *IoSocket) dispatch() {
 	}
 }
 
+/*
+
+ */
 func (s *IoSocket) Call(handlerDesc metadata.HandlerDesc, seqID uint64, opts ...Option) (*Body, error) {
 	var options = Options{
 		RequestTimeout: time.Second,
@@ -100,24 +103,22 @@ func (s *IoSocket) Call(handlerDesc metadata.HandlerDesc, seqID uint64, opts ...
 		opt(&options)
 	}
 
-	if seqID%1000 == 0 {
-		log.Printf("call seqID :%d", seqID)
-	}
-
 	request := &RequestContext{
 		SeqID:   seqID,
 		Request: &handlerDesc,
 	}
+
 	request.Add(1)
 	request.Timer = time.AfterFunc(options.RequestTimeout, func() {
 		s.requestCtxEnd(request, nil, ErrRequestTimeOut)
 	})
 	select {
-	case <-s.exitC:
-		return nil, ErrExited
-	case s.requestC <- request:
-		//default:
-		//	return nil, ErrChanSize
+	case <-s.exitC: //socket 关闭
+		return nil, InternalErrExited
+	case s.requestC <- request: //正常完成
+
+	default: //请求过多
+		return nil, InternalErrChanSize
 	}
 
 	request.Wait()
@@ -141,7 +142,7 @@ func (i *IoSocket) Close() error {
 
 	//i.controller.Range(func(key, value interface{}) bool {
 	//	request := value.(*requestContext)
-	//	i.contextEnd(request, nil, ErrExited)
+	//	i.contextEnd(request, nil, InternalErrExited)
 	//	return true
 	//})
 	return i.wc.Close()

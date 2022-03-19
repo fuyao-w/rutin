@@ -51,16 +51,15 @@ func main() {
 				wg.Done()
 			}()
 			var resp worker.ClacResp
-			//log.Printf("%d resp :%+v\n", i, resp)
+			//log.Printf("%d r esp :%+v\n", i, resp)
 			if err := handle.Calc(worker.ClacReq{
 				A: i,
 				B: i >> 1,
 			}, &resp); err != nil {
 				log.Printf("calc err %s", err)
 			} else {
-				//fmt.Println("resp", resp.Result)
+				fmt.Println("resp", resp.Result)
 			}
-
 
 		}(i)
 
