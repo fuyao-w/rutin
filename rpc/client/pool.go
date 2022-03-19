@@ -48,7 +48,7 @@ func (p *pool) releaseSock(host string, sock socket) {
 	if p.sockets[host] == nil {
 		return
 	}
-	if _, ok := p.sockets[host][sock]; ok {
+	if _, ok := p.sockets[host][sock]; !ok {
 		return
 	}
 	delete(p.sockets[host], sock)

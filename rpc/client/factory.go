@@ -3,6 +3,7 @@ package client
 import (
 	"context"
 	"github.com/fuyao-w/rutin/core"
+	"github.com/fuyao-w/rutin/rpc/internal/iosocket"
 	"log"
 )
 
@@ -29,7 +30,12 @@ func (r *rpcFactory) Factory(host string) (core.Plugin, error) {
 		}()
 		rpcCtx := ctx.Value(rpcContextKey).(*RpcContext)
 
-		if body, err = socket.Call(rpcCtx.EndPoint, rpcCtx.Request); err != nil {
+		body, err = socket.Call(rpcCtx.EndPoint, rpcCtx.Request)
+		switch {
+		case err == iosocket.InternalErrExited:
+			r.connPool.releaseSock(host, socket)
+			return
+		case err != nil:
 			return
 		}
 		err = r.options.Codec.Decode(body, rpcCtx.Response)
