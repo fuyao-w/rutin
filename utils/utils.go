@@ -2,6 +2,7 @@ package utils
 
 import (
 	"encoding/json"
+	"io"
 	netAddr "net"
 	"runtime"
 )
@@ -43,4 +44,12 @@ func GetIP() string {
 		}
 	}
 	return "127.0.0.1"
+}
+
+type MockReader []byte
+
+// MockReader mock Reader interface , r 的长度不要大于 bufio.Reader 缓冲区的长度
+func (r MockReader) Read(p []byte) (n int, err error) {
+	copy(p, r)
+	return len(r), io.EOF
 }
