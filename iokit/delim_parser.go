@@ -6,33 +6,52 @@ import (
 )
 
 /*
-	自定义分隔符的解析器
-	@Delim 自定义的分隔符
-	只要消息体里也能出现分隔符的协议都不适合这个解码器
+	DelimParser 分隔符解析器，使用 $ 作为分隔符，% 作为转义符
 */
-type DelimParser struct {
-	Delim byte
+type DelimParser struct{}
+
+var (
+	escapes byte = '%'
+	delim   byte = '$'
+)
+
+func (d *DelimParser) Encode(content []byte) (bytes []byte, err error) {
+	for _, b := range content {
+		if b == escapes || b == delim {
+			bytes = append(bytes, escapes)
+		}
+		bytes = append(bytes, b)
+	}
+	bytes = append(bytes, delim)
+	return
 }
 
-func (d *DelimParser) Decode(conn *bufio.Reader) (bytes []byte, err error) {
-	r := bufio.NewReader(conn)
+func (d *DelimParser) Decode(r *bufio.Reader) (bytes []byte, err error) {
+	var (
+		lastEscapes bool
+	)
 	for {
 		n, err := r.ReadByte()
 		if err != nil {
 			if err == io.EOF {
 				err = nil
 			}
-			break
+			return bytes, err
 		}
-		if n == d.Delim {
-			break
-		} else {
+
+		if lastEscapes {
+			bytes = bytes[:len(bytes)-1]
 			bytes = append(bytes, n)
+			lastEscapes = false
+		} else {
+			if n == delim {
+				break
+			}
+			bytes = append(bytes, n)
+			if n == escapes {
+				lastEscapes = true
+			}
 		}
 	}
 	return
-}
-
-func (d *DelimParser) Encode(content []byte) (bytes []byte, err error) {
-	return append(content, d.Delim), nil
 }
