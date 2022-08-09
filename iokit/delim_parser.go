@@ -28,7 +28,7 @@ func (d *DelimParser) Encode(content []byte) (bytes []byte, err error) {
 
 func (d *DelimParser) Decode(r *bufio.Reader) (bytes []byte, err error) {
 	var (
-		last bool
+		lastEscapes bool
 	)
 	for {
 		n, err := r.ReadByte()
@@ -39,17 +39,17 @@ func (d *DelimParser) Decode(r *bufio.Reader) (bytes []byte, err error) {
 			return bytes, err
 		}
 
-		if last {
+		if lastEscapes {
 			bytes = bytes[:len(bytes)-1]
 			bytes = append(bytes, n)
-			last = false
+			lastEscapes = false
 		} else {
 			if n == delim {
 				break
 			}
 			bytes = append(bytes, n)
 			if n == escapes {
-				last = true
+				lastEscapes = true
 			}
 		}
 	}
