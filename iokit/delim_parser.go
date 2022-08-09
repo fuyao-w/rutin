@@ -15,7 +15,7 @@ var (
 	delim   byte = '$'
 )
 
-func (d *DelimParser) EncodeC(content []byte) (bytes []byte, err error) {
+func (d *DelimParser) Encode(content []byte) (bytes []byte, err error) {
 	for _, b := range content {
 		if b == escapes || b == delim {
 			bytes = append(bytes, escapes)
@@ -26,10 +26,9 @@ func (d *DelimParser) EncodeC(content []byte) (bytes []byte, err error) {
 	return
 }
 
-func (d *DelimParser) Decode(conn *bufio.Reader) (bytes []byte, err error) {
+func (d *DelimParser) Decode(r *bufio.Reader) (bytes []byte, err error) {
 	var (
 		last bool
-		r    = bufio.NewReader(conn)
 	)
 	for {
 		n, err := r.ReadByte()
