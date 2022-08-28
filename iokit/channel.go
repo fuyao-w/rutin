@@ -150,11 +150,21 @@ func (c *Channel) readLoop() {
 		default:
 			body, err := c.options.codec.Decode(c.reader)
 			if err != nil {
-				if err, ok := err.(net.Error); ok && err.Temporary() {
+				//if errors.Is(err, io.EOF) { // 健康检查会不断 ping 发送 EOF
+				//	log.Println("io.EOF")
+				//	continue
+				//}
+				var opErr *net.OpError
+				if errors.As(err, &opErr) && opErr.Addr.String() == "127.0.0.1" {
+					log.Println("readLoop|decode err ", err, string(body))
+					time.Sleep(time.Second)
+				}
+				//if errors.Is(err,new(time.))
+				if err, ok := err.(net.Error); ok && err.Timeout() {
 					time.Sleep(time.Second)
 					continue
 				}
-				log.Println("readLoop|decode err ", err)
+				log.Println("readLoop|decode err ", err, string(body))
 				return
 			}
 			if len(body) == 0 {
