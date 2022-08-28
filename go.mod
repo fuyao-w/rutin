@@ -1,9 +1,11 @@
 module github.com/fuyao-w/rutin
 
-go 1.18
+go 1.17
 
 require (
 	github.com/BurntSushi/toml v1.2.0
+	github.com/fuyao-w/circuit_breaker v0.0.0-20220731110830-f949e9bb32ce
+	github.com/fuyao-w/rate_limit v0.0.0-20220724113445-ae610c73b189
 	github.com/gogo/protobuf v1.3.2
 	github.com/hashicorp/consul/api v1.14.0
 	github.com/jonboulle/clockwork v0.3.0

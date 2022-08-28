@@ -5,6 +5,8 @@ import (
 	"github.com/fuyao-w/rutin/core"
 	"github.com/fuyao-w/rutin/discovery"
 	"github.com/fuyao-w/rutin/endpoint"
+	"github.com/fuyao-w/rutin/kit/circurt_breaker"
+	"github.com/fuyao-w/rutin/kit/rate_limit"
 	"github.com/fuyao-w/rutin/kit/recovery"
 	"github.com/fuyao-w/rutin/kit/retry"
 	"github.com/fuyao-w/rutin/kit/upstream"
@@ -35,6 +37,8 @@ func newGeneralClient(factory discovery.PluginFactory, endpoint *endpoint.Servic
 	plugins := []core.Plugin{
 		recovery.Recover(),
 		retry.Retry(options.RetryTimes),
+		rate_limit.RateLimit(options.rateLimit),
+		circurt_breaker.CircuitBreaker(options.circuitBreaker),
 		upstream.NewUpStream(factory, func() discovery.Collection {
 			list := options.discovery.GetCollection(endpoint)
 			if len(list.GetInstances()) == 0 {
