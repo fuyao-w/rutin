@@ -97,7 +97,7 @@ func (s *IoSocket) dispatch() {
  */
 func (s *IoSocket) Call(handlerDesc metadata.HandlerDesc, seqID uint64, opts ...Option) (*Body, error) {
 	var options = Options{
-		RequestTimeout: time.Second,
+		RequestTimeout: time.Minute,
 	}
 	for _, opt := range opts {
 		opt(&options)

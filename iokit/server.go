@@ -7,6 +7,7 @@ import (
 	"net"
 	"sync"
 	"sync/atomic"
+	"time"
 )
 
 type (
@@ -65,9 +66,9 @@ func (s *IoServer) Start(l net.Listener) error {
 	for {
 		conn, err := l.Accept()
 		if err != nil {
-			if err, ok := err.(net.Error); ok && err.Temporary() {
+			if err, ok := err.(net.Error); ok && err.Timeout() {
 				log.Printf("IoServer|Accept|err %s ,idx :%d", err, i)
-				//time.Sleep(time.Second)
+				time.Sleep(time.Second)
 				continue
 			}
 			return err
@@ -83,5 +84,8 @@ func (s *IoServer) Stop() {
 	for listener := range s.listeners {
 		listener.Close()
 	}
-	s.cancel()
+	if s.cancel != nil {
+		s.cancel()
+	}
+
 }

@@ -4,13 +4,18 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/fuyao-w/rutin/consul"
+	"github.com/fuyao-w/rutin/discovery"
+	"github.com/fuyao-w/rutin/endpoint"
 	"github.com/fuyao-w/rutin/iokit"
 	"github.com/fuyao-w/rutin/rpc/internal/iosocket"
 	"github.com/fuyao-w/rutin/rpc/internal/metadata"
-	"github.com/fuyao-w/rutin/sd"
 	"io"
 	"net"
+	"os"
+	"os/signal"
 	"sync"
+	"syscall"
 
 	"go/token"
 	"log"
@@ -56,7 +61,7 @@ type (
 		values []reflect.Value
 	}
 	Service struct {
-		name string
+		info *endpoint.ServiceInfo
 		meth map[string]*methodType
 		typ  reflect.Type
 		rcvr reflect.Value
@@ -82,6 +87,13 @@ type (
 func getPath(service, meth string) string {
 	return fmt.Sprintf("%s.%s", service, meth)
 }
+
+func WithServiceName(name string) HandlerOption {
+	return func(options *HandlerOptions) {
+		options.HandlerName = name
+	}
+}
+
 func (r *RpcServer) NewHandler(handler interface{}, opts ...HandlerOption) Handler {
 	var options HandlerOptions
 	for _, opt := range opts {
@@ -117,7 +129,10 @@ func (r *RpcServer) Handle(handler Handler) error {
 		meth: suitableMethods(typ, false),
 		typ:  typ,
 		rcvr: rcvr,
-		name: handler.name,
+		info: &endpoint.ServiceInfo{
+			Name: handler.name,
+			Addr: r.options.addr,
+		},
 	}
 	r.Lock()
 	defer r.Unlock()
@@ -131,30 +146,50 @@ func (r *RpcServer) Use(plugin ...Plugin) Server {
 }
 
 func (r *RpcServer) Start() error {
+	var deferList []func()
 	//1. 服务发现注册
 	//2. 调用 iosocket.Server.Start()
-	l, err := net.Listen("tcp4", r.options.Address)
+	l, err := net.Listen("tcp4", r.options.addr.String())
 	if err != nil {
 		//logging.GenLogf("start rpc server on %s failed, %v", h.opts.Address, e)
-		fmt.Printf("start rpc server on %s failed, %v\n", r.options.Address, err)
+		fmt.Printf("start rpc server on %s failed, %v\n", r.options.addr.String(), err)
 		return err
 	}
-	for service := range r.serviceMap {
-		if err = sd.DefaultRegisterCenter.Register(service, r.options.Address); err != nil {
+	reg := r.options.register
+	for _, service := range r.serviceMap {
+		if err = reg.Register(service.info); err != nil {
 			log.Printf("service discover register failed :%s ,name :%s", err, r.options.ServiceName)
 			l.Close()
 			return err
 		}
+		deferList = append(deferList, func() {
+			reg.Deregister(service.info)
+		})
 	}
 
-	if err = r.server.Server.Start(l); err != nil {
-		return err
+	go func() {
+		if err = r.server.Server.Start(l); err != nil {
+			return
+		}
+	}()
+	quit := make(chan os.Signal, 1) // 创建一个接收信号的通道
+	// kill 默认会发送 syscall.SIGTERM 信号
+	// kill -2 发送 syscall.SIGINT 信号，我们常用的Ctrl+C就是触发系统SIGINT信号
+	// kill -9 发送 syscall.SIGKILL 信号，但是不能被捕获，所以不需要添加它
+	// signal.Notify把收到的 syscall.SIGINT或syscall.SIGTERM 信号转发给quit
+	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM) // 此处不会阻塞
+	<-quit
+	for _, f := range deferList {
+		f()
 	}
-	<-r.stop
+	//注销服务发现
+	//r.server.Server.Stop()
+	log.Println("shut down")
 	return nil
 }
 
 func (r *RpcServer) Stop() error {
+
 	defer func() {
 		close(r.stop)
 	}()
@@ -313,8 +348,14 @@ func (r *RpcServer) call(handle Service, desc metadata.HandlerDesc) (reply refle
 	return reply, err
 }
 
+var DefaultRegisterCenter discovery.Register
+
 func NewRpcServer(opts ...Option) Server {
-	var options Options
+	var (
+		options = Options{
+			register: consul.NewConsulDiscovery(),
+		}
+	)
 	for _, opt := range opts {
 		opt(&options)
 	}

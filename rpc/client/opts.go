@@ -1,6 +1,7 @@
 package client
 
 import (
+	"github.com/fuyao-w/rutin/discovery"
 	"github.com/fuyao-w/rutin/rpc/codec"
 	"time"
 )
@@ -13,6 +14,7 @@ type Options struct {
 	RetryTimes int
 	Timeout    time.Duration
 	dialer     dialer
+	discovery  discovery.ServiceDiscover
 }
 
 type Option func(options *Options)

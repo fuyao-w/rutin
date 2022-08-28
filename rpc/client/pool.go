@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	DefaultPoolSize = 10
+	DefaultPoolSize = 86400
 	DefaultPoolTTL  = time.Second * 60
 )
 

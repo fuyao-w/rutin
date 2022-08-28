@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"log"
 	"strconv"
 	"strings"
 )
@@ -18,6 +19,7 @@ func (p *ProtocolParser) Decode(r *bufio.Reader) ([]byte, error) {
 	)
 	line, err := r.ReadString('\n')
 	if err != nil {
+		log.Println("ReadString err ", err)
 		return nil, err
 	}
 

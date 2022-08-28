@@ -36,7 +36,7 @@ func initRpcSocket(conn net.Conn, options Options) *RpcSocket {
 }
 
 func (r *RpcSocket) Call(endpoint string, req interface{}) ([]byte, error) {
-	arr := strings.Split(endpoint, ".")
+	arr := strings.Split(endpoint, "|")
 	if len(arr) != 2 {
 		return nil, errors.New("endpoint format err .right format : serviceName.methName")
 	}
