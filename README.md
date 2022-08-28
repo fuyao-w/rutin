@@ -1,5 +1,10 @@
 # rutin
-里面目前有简陋的 rpc  、通过服务发现调用
+简陋的 rpc  框架、通过服务发现调用
+
+### 特性：
+1. 默认使用长链接
+2. 支持服务发现，目前默认 consul
+3. 支持 Plugin （整体流程就是基于 Plugin 实现）
 
 目前没有自动生成静态代理 handler 的功能，只能自己手写
 
@@ -7,13 +12,6 @@
 
 ```go
 
-func init() {
-	sd.InitSd(sd.RegisterCenter{
-		Type: "redis",
-		Addr: "127.0.0.1:6379",
-	})
-
-}
 func main() {
 	
 	go func() {
