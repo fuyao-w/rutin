@@ -2,6 +2,7 @@ package worker
 
 import (
 	"context"
+	"github.com/fuyao-w/rutin/endpoint"
 	"github.com/fuyao-w/rutin/rpc/client"
 )
 
@@ -9,7 +10,7 @@ type ProxyHandle struct {
 	client client.NetClient
 }
 
-const serviceName = "Handle"
+const serviceName = "user.account.login"
 
 func (p *ProxyHandle) Name() string {
 	return "calc"
@@ -17,7 +18,9 @@ func (p *ProxyHandle) Name() string {
 
 func InitProxyHandle() *ProxyHandle {
 	return &ProxyHandle{
-		client: client.RpcClient(serviceName),
+		client: client.RpcClient(&endpoint.ServiceInfo{
+			Name: serviceName,
+		}),
 	}
 }
 
@@ -39,5 +42,5 @@ type ClacResp struct {
 }
 
 func (p *ProxyHandle) Calc(req ClacReq, calcResp *ClacResp) error {
-	return p.client.Invoke(context.TODO(), "Handle.Calc", req, calcResp)
+	return p.client.Invoke(context.TODO(), serviceName+"|"+"Calc", req, calcResp)
 }

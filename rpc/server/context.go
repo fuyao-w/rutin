@@ -3,15 +3,19 @@ package server
 import (
 	"context"
 	"github.com/fuyao-w/rutin/core"
+	"github.com/fuyao-w/rutin/discovery"
 	"github.com/fuyao-w/rutin/rpc/codec"
+	"net"
 )
 
 type Plugin func(c *Context)
 
 type Options struct {
-	Address     string
+	addr        net.Addr
 	ServiceName string
 	codec       codec.RequestCodec
+	register    discovery.Register
+
 	//handlerFunc iokit.HandlerFunc
 }
 
@@ -24,7 +28,17 @@ func NewCodec(codec codec.RequestCodec) Option {
 }
 func NewAddress(address string) Option {
 	return func(opt *Options) {
-		opt.Address = address
+		var err error
+		opt.addr, err = net.ResolveTCPAddr("", address)
+		if err != nil {
+			panic("address invalid")
+		}
+	}
+}
+
+func NewServiceName(name string) Option {
+	return func(opt *Options) {
+		opt.ServiceName = name
 	}
 }
 

@@ -1,21 +1,24 @@
-package sd
+package upstream
 
 import (
 	"context"
 	"errors"
 	"github.com/fuyao-w/rutin/core"
+	"github.com/fuyao-w/rutin/discovery"
+	"github.com/fuyao-w/rutin/load_balance"
 	"log"
 )
 
-func NewUpStream(fac PluginFactory, name string) core.Plugin {
+func NewUpStream(fac discovery.PluginFactory, getCollection func() discovery.Collection) core.Plugin {
 	return core.Function(func(ctx context.Context, core core.Drive) {
-		arrs := DefaultRegisterCenter.GetAddrSlice(name)
-		if len(arrs) == 0 {
+		lb := load_balance.NewLoadBalancer()
+		instance := lb.GetPicker(getCollection()).Pick()
+		if instance == nil {
 			log.Printf("client no upstream")
 			core.AbortErr(errors.New("no upstream"))
 			return
 		}
-		plugin, err := fac.Factory(arrs[0])
+		plugin, err := fac.Factory(instance.GetAddr().String())
 		if err != nil {
 			log.Printf("NewUpStream|Factory err %s", err)
 			core.AbortErr(err)
