@@ -29,12 +29,22 @@ var lbFuncMap = map[LoadBalanceType]pickerFunc{
 	},
 }
 
+var defaultLB = NewLoadBalancer()
+
 type LoadBalancer interface {
 	GetPicker(discovery.Collection) Picker
 }
 
 type LoadBalance struct {
 	pickerFunc
+}
+
+func UpdateLocalLoadBalancer(lbType LoadBalanceType) {
+	defaultLB = NewLoadBalancer(lbType)
+}
+
+func GetLocalLoadBalancer() LoadBalancer {
+	return defaultLB
 }
 
 func (l *LoadBalance) GetPicker(collection discovery.Collection) Picker {

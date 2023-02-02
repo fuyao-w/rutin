@@ -11,8 +11,7 @@ import (
 
 func NewUpStream(fac discovery.PluginFactory, getCollection func() discovery.Collection) core.Plugin {
 	return core.Function(func(ctx context.Context, core core.Drive) {
-		lb := load_balance.NewLoadBalancer()
-		instance := lb.GetPicker(getCollection()).Pick()
+		instance := load_balance.GetLocalLoadBalancer().GetPicker(getCollection()).Pick()
 		if instance == nil {
 			log.Printf("client no upstream")
 			core.AbortErr(errors.New("no upstream"))

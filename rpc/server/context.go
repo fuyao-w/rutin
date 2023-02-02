@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/fuyao-w/rutin/core"
 	"github.com/fuyao-w/rutin/discovery"
+	"github.com/fuyao-w/rutin/load_balance"
 	"github.com/fuyao-w/rutin/rpc/codec"
 	"net"
 )
@@ -33,6 +34,11 @@ func NewAddress(address string) Option {
 		if err != nil {
 			panic("address invalid")
 		}
+	}
+}
+func WithLoadBalancer(t load_balance.LoadBalanceType) Option {
+	return func(opt *Options) {
+		load_balance.UpdateLocalLoadBalancer(t)
 	}
 }
 
